@@ -13,6 +13,7 @@ class CustomerController extends Controller
 {
     public function ShopifyCustomers($next = null){
         $shop = Auth::user();
+
         $customers = $shop->api()->rest('GET', '/admin/customers.json', [
             'limit' => 250,
             'page_info' => $next
@@ -87,6 +88,7 @@ class CustomerController extends Controller
 
     public function addAgent(Request $request)
     {
+
         $request -> validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -94,6 +96,7 @@ class CustomerController extends Controller
             'phone_no' => 'required|unique:customers',
         ]);
         $shop = Auth::user();
+
         if (isset($request->discount)) {
             list($couponCode, $price_rule_id) = $this->createDiscount($request, $shop);
         }
@@ -115,6 +118,7 @@ class CustomerController extends Controller
             'price_rule_id' => $price_rule_id,
         ]);
          $customers = $shop->api()->rest('post', '/admin/customers.json', [
+
             'customer' => [
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -159,6 +163,10 @@ class CustomerController extends Controller
 
                 ]
             ]);
+//        $customers = json_decode(json_encode($customers));
+//        $test = $shop->api()->rest('GET', '/admin/customers/'.$customers->body->customer->id.'/metafields.json');
+//        dd($test);
+
          $user = User::create([
              'email' => $request->email,
              'password' => Hash::make($request->password),
@@ -166,8 +174,6 @@ class CustomerController extends Controller
          ]);
         $user->assignRole('agent');
         return redirect()->back()->with('success', 'Agent Added Successfully');
-    //    $customers = json_decode(json_encode($customers));
-    //  dd($shop->api()->rest('get', '/admin/customers/'.$customers->body->customer->id.'/metafields.json'));
 
     }
 
@@ -197,5 +203,15 @@ class CustomerController extends Controller
             return [$discountCode->body->discount_code->code, $discountCode->body->discount_code->price_rule_id];
         }
         return 'none';
+    }
+    public function check_customer_email(Request $request){
+
+        $customer = Customer::where('email',$request->email)->first();
+        if (isset($customer)){
+            return response()->json([
+                'discount' => $customer->discount,
+                'coupon_code' => $customer->coupon_code,
+            ]);
+        }
     }
 }

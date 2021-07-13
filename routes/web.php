@@ -23,12 +23,15 @@ Route::group(['middleware' => ['auth.shopify']], function () {
     })->name('home');
     Route::get('/customers', function ()
     {
+
         $customers = Customer::latest()->paginate(20);
         $countries = Country::all();
         return view('customers', compact('customers', 'countries'));
     })->name('customers');
     Route::get('/sync-customer', 'CustomerController@ShopifyCustomers')->name('sync-customer');
     Route::post('/add-agent', 'CustomerController@addAgent')->name('add_agent');
+
+
     Route::get('/orders', 'OrderController@showAll')->name('orders');
     Route::get('/sync-orders', 'OrderController@syncOrders')->name('sync_orders');
     Route::post('show-states', function (Request $request)
@@ -59,8 +62,13 @@ Route::group(['middleware' => ['auth.shopify']], function () {
 
     Route::post('/refund', 'OrderController@makeRefund')->name('make_refund');
     Route::get('/analytics', 'AnalyticsController@showAnalytics')->name('analytics');
+
+
 });
+
+Route::post('/check-customer-email', 'CustomerController@check_customer_email')->name('check-customer-email');
 
 Auth::routes();
 Route::get('/agent-analytics', 'AgentController@showAnalytics')->name('agent-analytics')->middleware('auth');
 Route::get('/agenthome', 'HomeController@index')->name('agenthome');
+Route::get('logout', 'LoginController@logout');

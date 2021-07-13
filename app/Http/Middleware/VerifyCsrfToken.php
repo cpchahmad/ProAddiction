@@ -12,7 +12,8 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'https://proaddiction.test/show-states',
-        'https://proaddiction.test/show-city',
+        '/show-states',
+        '/show-city',
+        '/check-customer-email'
     ];
 }

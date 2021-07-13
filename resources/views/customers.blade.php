@@ -143,7 +143,7 @@
         <div class="d-flex justify-content-between mb-3">
             <h5>Customers</h5>
             <div>
-                <a type="button" class="btn btn-info btn-lg" href="{{route('sync-customer')}}">Sync Customers</a>
+{{--                <a type="button" class="btn btn-info btn-lg" href="{{route('sync-customer')}}">Sync Customers</a>--}}
                 <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add New Agent</button>
             </div>
         </div>
