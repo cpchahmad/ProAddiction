@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,6 +27,9 @@ class AgentController extends Controller
         return view('customer.analytics', compact('orders', 'authUser', 'totalOrdersCount', 'totalRefundCount'));
     }
     public function agent_dashboard(Request $request){
-        dd($request->all(),'true');
+        $user = User::where('email',$request->email)->first();
+        if ($user != null){
+            return redirect('agenthome');
+        }
     }
 }
