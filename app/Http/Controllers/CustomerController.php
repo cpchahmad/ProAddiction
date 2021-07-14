@@ -199,6 +199,7 @@ class CustomerController extends Controller
                 'code' => $priceRule->body->price_rule->title,
             ]
         ]);
+
         $discountCode = json_decode(json_encode($discountCode));
         if(!$discountCode->errors)
         {
