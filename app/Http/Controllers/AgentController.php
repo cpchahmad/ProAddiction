@@ -25,7 +25,7 @@ class AgentController extends Controller
        // $totalRefundCount = $orders->where('refund', 1)->where($orders->agent->email, $authUser->email)->get()->count();
         return view('customer.analytics', compact('orders', 'authUser', 'totalOrdersCount', 'totalRefundCount'));
     }
-    public function agent_dashboard(){
-        dd('true');
+    public function agent_dashboard(Request $request){
+        dd($request->all(),'true');
     }
 }
