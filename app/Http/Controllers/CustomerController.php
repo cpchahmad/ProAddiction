@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Customer;
 use App\User;
 use Carbon\Carbon;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -129,6 +130,8 @@ class CustomerController extends Controller
                     'address1' => $request->city.' '.$request->state.' '.$request->country,
                 ]
                 ],
+                "password" => $request->password,
+                "password_confirmation" => $request->password,
                 "metafields" =>
                     array(
                         0 =>
@@ -165,7 +168,6 @@ class CustomerController extends Controller
             ]);
 //        $customers = json_decode(json_encode($customers));
 //        $test = $shop->api()->rest('GET', '/admin/customers/'.$customers->body->customer->id.'/metafields.json');
-//        dd($test);
 
          $user = User::create([
              'email' => $request->email,
@@ -211,6 +213,11 @@ class CustomerController extends Controller
             return response()->json([
                 'discount' => $customer->discount,
                 'coupon_code' => $customer->coupon_code,
+                'agent' => 'you are an agent',
+            ]);
+        }else{
+            return response()->json([
+               'agent' => 'you are not an agent',
             ]);
         }
     }

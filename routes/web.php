@@ -67,6 +67,8 @@ Route::group(['middleware' => ['auth.shopify']], function () {
 });
 
 Route::post('/check-customer-email', 'CustomerController@check_customer_email')->name('check-customer-email');
+Route::get('/agent-dashboard', 'AgentController@agent_dashboard')->name('agent-dashboard');
+
 
 Auth::routes();
 Route::get('/agent-analytics', 'AgentController@showAnalytics')->name('agent-analytics')->middleware('auth');
