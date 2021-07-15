@@ -169,7 +169,7 @@ class CustomerController extends Controller
                 ]
             ]);
 
-        dd($request->phone_no);
+       dd($customers);
 //        $customers = json_decode(json_encode($customers));
 //        $test = $shop->api()->rest('GET', '/admin/customers/'.$customers->body->customer->id.'/metafields.json');
 
