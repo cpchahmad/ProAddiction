@@ -4,7 +4,7 @@
     <div class="col-lg-10 col-md-9 p-4">
 
         <div class="d-flex justify-content-between mb-3">
-            <h5>Analytics</h5>
+            <h5>Orders</h5>
 
         </div>
         <div class="row">

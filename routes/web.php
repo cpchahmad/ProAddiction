@@ -71,7 +71,7 @@ Route::get('/agent-dashboard', 'AgentController@agent_dashboard')->name('agent-d
 
 
 Auth::routes();
-Route::get('/agent-analytics', 'AgentController@index')->name('agent-analytics')->middleware('auth');
+Route::get('/agent-order-history', 'AgentController@index')->name('agent-order-history')->middleware('auth');
 Route::get('/agenthome', 'HomeController@index')->name('agenthome');
 
 Route::get('logout', 'LoginController@logout');

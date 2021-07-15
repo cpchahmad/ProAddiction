@@ -7,7 +7,7 @@
     <li class="
     @if (request()->is('/analytics'))
         active
-    @endif"><a href="{{route('agent-analytics')}}"><span class="fa fa-dashboard"></span> Analytics</a></li>
+    @endif"><a href="{{route('agent-order-history')}}"><span class="fa fa-dashboard"></span>Orders History</a></li>
     <div class="d-block d-md-none">
         <div class="dropdown-divider"></div>
         <li><a href="{{route('logout')}}"> Sign Out</a></li>
