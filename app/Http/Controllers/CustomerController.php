@@ -167,8 +167,8 @@ class CustomerController extends Controller
                 ]
             ]);
 
+        dd($customers);
         $customers = json_decode(json_encode($customers));
-        dd($customers->phone);
 //        $test = $shop->api()->rest('GET', '/admin/customers/'.$customers->body->customer->id.'/metafields.json');
 
          $user = User::create([
