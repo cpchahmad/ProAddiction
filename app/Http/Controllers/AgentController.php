@@ -32,7 +32,7 @@ class AgentController extends Controller
 
         if ($user != null){
             Auth::login($user);
-            return redirect('agenthome');
+
         }else{
             return back();
         }
