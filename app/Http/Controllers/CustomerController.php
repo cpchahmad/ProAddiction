@@ -94,7 +94,7 @@ class CustomerController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|unique:customers',
-            'phone_no' => 'required|unique:customers',
+            'phone_no' => 'required',
         ]);
         $shop = Auth::user();
 
