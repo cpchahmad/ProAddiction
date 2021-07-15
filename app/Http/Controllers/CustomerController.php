@@ -118,7 +118,7 @@ class CustomerController extends Controller
             'commission' => $request->commission_rate,
             'price_rule_id' => $price_rule_id,
         ]);
-        dd($request->phone_no);
+
 
         $customers = $shop->api()->rest('post', '/admin/customers.json', [
 
@@ -169,8 +169,8 @@ class CustomerController extends Controller
                 ]
             ]);
 
-        dd($customers);
-        $customers = json_decode(json_encode($customers));
+        dd($request->phone_no);
+//        $customers = json_decode(json_encode($customers));
 //        $test = $shop->api()->rest('GET', '/admin/customers/'.$customers->body->customer->id.'/metafields.json');
 
          $user = User::create([
