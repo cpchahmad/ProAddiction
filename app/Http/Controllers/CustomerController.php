@@ -94,7 +94,7 @@ class CustomerController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|unique:customers',
-            'phone_no' => 'required',
+            'phone_no' => 'required|unique:customers',
         ]);
         $shop = Auth::user();
 
@@ -167,7 +167,7 @@ class CustomerController extends Controller
                 ]
             ]);
 
-         dd($customers);
+         dd($customers->phone);
 //        $customers = json_decode(json_encode($customers));
 //        $test = $shop->api()->rest('GET', '/admin/customers/'.$customers->body->customer->id.'/metafields.json');
 
