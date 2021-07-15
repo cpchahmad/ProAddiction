@@ -126,7 +126,6 @@ class CustomerController extends Controller
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
-
                 'addresses' =>  [ 0 => [
                     'zip' => $request->seller_code,
                     'address1' => $request->city.' '.$request->state.' '.$request->country,
@@ -169,7 +168,7 @@ class CustomerController extends Controller
                 ]
             ]);
 
-       dd($customers);
+
 //        $customers = json_decode(json_encode($customers));
 //        $test = $shop->api()->rest('GET', '/admin/customers/'.$customers->body->customer->id.'/metafields.json');
 
