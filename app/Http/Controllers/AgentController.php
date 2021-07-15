@@ -31,6 +31,7 @@ class AgentController extends Controller
         $user = User::where('email',$request->email)->first();
 
         if ($user != null){
+            Auth::login($user);
             return redirect('agenthome');
         }else{
             return back();
