@@ -29,7 +29,7 @@ class AgentController extends Controller
     public function agent_dashboard(Request $request){
 
         $user = User::where('email',$request->email)->first();
-
+//dd($user);
         if ($user != null){
             Auth::login($user);
             return redirect('agenthome');
