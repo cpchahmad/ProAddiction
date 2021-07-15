@@ -118,7 +118,9 @@ class CustomerController extends Controller
             'commission' => $request->commission_rate,
             'price_rule_id' => $price_rule_id,
         ]);
-         $customers = $shop->api()->rest('post', '/admin/customers.json', [
+        dd($request->phone_no);
+
+        $customers = $shop->api()->rest('post', '/admin/customers.json', [
 
             'customer' => [
                 'first_name' => $request->first_name,
