@@ -27,8 +27,9 @@ class AgentController extends Controller
         return view('customer.analytics', compact('orders', 'authUser', 'totalOrdersCount', 'totalRefundCount'));
     }
     public function agent_dashboard(Request $request){
+
         $user = User::where('email',$request->email)->first();
-        dd($user);
+
         if ($user != null){
             return redirect('agenthome');
         }else{
