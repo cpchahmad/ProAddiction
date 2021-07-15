@@ -3,7 +3,7 @@
     <li class="
     @if (request()->is('/'))
         active
-    @endif"><a href="#"><span class="fa fa-dashboard"></span> Dashboard</a></li>
+    @endif"><a href="{{route('agenthome')}}"><span class="fa fa-dashboard"></span> Dashboard</a></li>
     <li class="
     @if (request()->is('/analytics'))
         active

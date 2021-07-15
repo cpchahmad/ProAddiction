@@ -12,10 +12,10 @@
     @if (request()->is('orders'))
         active
     @endif" ><a href="{{route('orders')}}"><span class="fa fa-first-order"></span> Orders</a></li>
-    <li class="
-    @if (request()->is('analytics'))
-        active
-    @endif" ><a href="{{route('analytics')}}"><span class="fa fa-bar-chart" aria-hidden="true"></span>Analytics</a></li>
+{{--    <li class="--}}
+{{--    @if (request()->is('analytics'))--}}
+{{--        active--}}
+{{--    @endif" ><a href="{{route('analytics')}}"><span class="fa fa-bar-chart" aria-hidden="true"></span>Analytics</a></li>--}}
     <div class="d-block d-md-none">
         <div class="dropdown-divider"></div>
         <li><a href="#"> Profile</a></li>
