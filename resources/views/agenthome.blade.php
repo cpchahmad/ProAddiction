@@ -212,7 +212,6 @@
         </div>
         <!-- end third box -->
 
-
     </div>
 
 @endsection
