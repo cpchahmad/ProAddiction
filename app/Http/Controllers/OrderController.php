@@ -24,6 +24,8 @@ class OrderController extends Controller
             'page_info' => $next,
             'status' => 'any',
         ]);
+        dd($shop,$orders);
+
         $orders = json_decode(json_encode($orders));
         foreach ($orders->body->orders as $order){
             $this->createShopifyOrders($order, $shop);
