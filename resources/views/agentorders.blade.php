@@ -25,13 +25,15 @@
                         <th scope="col">Discount %</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col">Shipping Address</th>
+                        <th scope="col">Action</th>
+
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($agent_orders as $order)
                         <tr>
 
-                            <td>{{$order->order_name}}</td>
+                            <td><a href="{{route('agent-order-view',($order->id))}}">{{$order->order_name}}</a></td>
                             <td>{{$order->created_at->toDateString()}}</td>
                             <td>{{$order->total_price}}</td>
 
@@ -82,6 +84,11 @@
                                 </div>
                             </td>
 
+                            <td>
+                                <div class="text-end">
+                                    <a href="{{route('agent-order-view',($order->id))}}" class="btn btn-sm btn-primary" type="button"> view</a>
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

@@ -37,16 +37,23 @@ class AgentController extends Controller
             $agent_orders = Order::where('coupon_code', $agent_coupen)->get();
             $total_sales = $agent_orders->sum('total_price');
             $total_commission = (($agent->commission / 100) * $total_sales );
+
             return view('agentorders')->with([
                 'agent_orders' => $agent_orders,
                 'agent' => $agent,
                 'total_sales' => $total_sales,
                 'total_commission' => $total_commission,
+
             ]);
         }else{
             return view('home');
         }
 
+    }
+
+    public function order_detail($id){
+        $order = Order::findorfail($id);
+        return view('agentorder')->with('order',$order);
     }
 
     public function agent_dashboard(Request $request){

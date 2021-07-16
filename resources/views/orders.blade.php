@@ -83,8 +83,7 @@
                                 <td>
                                     @if($order->status == 1 && $order->refund == 0 && $order->agent != null)
                                         {{
-                                            ($order->agent->commission / 100) * $order->total_price
-}}
+                                            ($order->agent->commission / 100) * $order->total_price}}
                                     @else
                                         0
                                     @endif

@@ -27,6 +27,7 @@ class OrderController extends Controller
         ]);
 
 
+
         $orders = json_decode(json_encode($orders));
         foreach ($orders->body->orders as $order){
             $this->createShopifyOrders($order, $shop);

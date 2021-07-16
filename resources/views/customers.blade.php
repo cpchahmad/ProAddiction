@@ -164,14 +164,18 @@
                         <th scope="col">Seller Color</th>
                         <th scope="col">Discount in percentage</th>
                         <th scope="col">Commission</th>
+                        <th scope="col">Action</th>
+
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($customers as $customer)
                     <tr>
     {{--                    <th scope="row">1</th>--}}
-                        <td>{{$customer->first_name}}&nbsp;{{$customer->last_name}}</td>
-                        <td>{{date_create($customer->created_at)->format('d m, Y h:i a')}}</td>
+                        <td><a href="{{route('customer-view',($customer->id))}}">{{$customer->first_name}}&nbsp;{{$customer->last_name}}</a></td>
+
+                        <td>{{\Carbon\Carbon::parse($customer->created_at)->format('d/m/Y')}}</td>
+
                         <td>{{$customer->phone_no}}</td>
                         <td>{{$customer->email}}</td>
                         <td>
@@ -199,7 +203,11 @@
                             none
                             @endif
                         </td>
-
+                        <td>
+                            <div class="text-end">
+                                <a href="{{route('customer-view',($customer->id))}}" class="btn btn-sm btn-primary" type="button"> view</a>
+                            </div>
+                        </td>
                     </tr>
                     @endforeach
 

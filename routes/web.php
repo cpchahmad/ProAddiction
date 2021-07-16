@@ -28,6 +28,8 @@ Route::group(['middleware' => ['auth.shopify']], function () {
         $countries = Country::all();
         return view('customers', compact('customers', 'countries'));
     })->name('customers');
+    Route::get('/customer-view/{id}', 'CustomerController@customer_detail')->name('customer-view');
+
     Route::get('/sync-customer', 'CustomerController@ShopifyCustomers')->name('sync-customer');
     Route::post('/add-agent', 'CustomerController@addAgent')->name('add_agent');
 
@@ -66,12 +68,14 @@ Route::group(['middleware' => ['auth.shopify']], function () {
 
 });
 
-Route::get('/check-customer-email', 'CustomerController@check_customer_email')->name('check-customer-email');
+Route::post('/check-customer-email', 'CustomerController@check_customer_email')->name('check-customer-email');
 Route::get('/agent-dashboard', 'AgentController@agent_dashboard')->name('agent-dashboard');
 
 
 Auth::routes();
 Route::get('/agent-order-history', 'AgentController@index')->name('agent-order-history')->middleware('auth');
+Route::get('/agent-order-view/{id}', 'AgentController@order_detail')->name('agent-order-view')->middleware('auth');
+
 Route::get('/agenthome', 'HomeController@index')->name('agenthome');
 
 Route::get('logout', 'LoginController@logout');

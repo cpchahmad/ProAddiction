@@ -182,6 +182,15 @@ class CustomerController extends Controller
 
     }
 
+    public  function customer_detail($id){
+
+        $customer = Customer::findorfail($id);
+        return view('customerdetail')->with(
+            'customer',$customer
+        );
+
+    }
+
     public function createDiscount($request, $shop)
     {
         $priceRule = $shop->api()->rest('post', '/admin/price_rules.json', [
