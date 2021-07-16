@@ -19,12 +19,13 @@ class OrderController extends Controller
 
     public function syncOrders($next = null){
         $shop = Auth::user();
+        dd($shop);
         $orders = $shop->api()->rest('GET', '/admin/orders.json', [
             'limit' => 250,
             'page_info' => $next,
             'status' => 'any',
         ]);
-        dd($shop,$orders);
+
 
         $orders = json_decode(json_encode($orders));
         foreach ($orders->body->orders as $order){
