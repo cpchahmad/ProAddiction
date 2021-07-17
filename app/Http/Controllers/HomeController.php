@@ -80,7 +80,6 @@ class HomeController extends Controller
             }
 
             $ordersQ->get();
-
             $graph_one_order_dates = $ordersQ->pluck('date')->toArray();
             $graph_one_order_values = $ordersQ->pluck('total')->toArray();
             $graph_two_order_values = $ordersQ->pluck('total_sum')->toArray();
