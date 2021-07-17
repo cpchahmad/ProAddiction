@@ -63,7 +63,7 @@
                             <div class="media-body p-2">
                                 <h6 class="media-title m-0">Total Commission</h6>
                                 <div class="media-text">
-                                    <h3>{{$total_commission}}</h3>
+                                    <h3>{{number_format($total_commission,2)}}</h3>
                                 </div>
                             </div>
                         </div>
