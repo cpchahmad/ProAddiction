@@ -35,7 +35,6 @@ class HomeController extends Controller
             $agent_coupen = $agent->coupon_code;
 
             $agent_orders = Order::where('coupon_code', $agent_coupen)->get();
-            dd($agent_orders);
             $total_sales = $agent_orders->sum('total_price');
             $total_commission = ($agent->commission / 100 ) * $total_sales;
             $store_total_orders = Order::get()->count();
