@@ -1,6 +1,14 @@
 @extends('layouts.agent_main')
 @section('content')
 
+    <style>
+        .table_wrapper{
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    </style>
+
     <div class="col-lg-10 col-md-9 p-4">
 
         <div class="d-flex justify-content-between mb-3">
@@ -10,22 +18,22 @@
         <div class="row">
             <div class="col-lg-12 pl-3">
 
-                <table class="table table-striped table-hover">
+                <table class="table table_wrapper table-striped table-hover">
                     <thead class="border-0">
                     <tr>
-                        <th scope="col">Order Id</th>
-                        <th scope="col">Date</th>
+                        <th scope="col"><h6>Order Id</h6></th>
+                        <th scope="col"><h6>Date</h6></th>
                         {{--<th scope="col">Total Order</th>--}}
-                        <th scope="col">Total Price</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Seller Area</th>
-                        <th scope="col"> Color & Zip Code</th>
-                        <th scope="col">Commission Rate %</th>
-                        <th scope="col">Total Commission</th>
-                        <th scope="col">Discount %</th>
-                        <th scope="col">Customer Name</th>
-                        <th scope="col">Shipping Address</th>
-                        <th scope="col">Action</th>
+                        <th scope="col"><h6>Total Price</h6> </th>
+                        <th scope="col"><h6>Name</h6></th>
+                        <th scope="col"><h6>Seller Area</h6> </th>
+                        <th scope="col"><h6> Color & Zip Code</h6>  </th>
+                        <th scope="col"><h6>Commission Rate %</h6>  </th>
+                        <th scope="col"><h6>Total Commission</h6> </th>
+                        <th scope="col"><h6>Discount %</h6> </th>
+                        <th scope="col"><h6>Customer Name</h6> </th>
+                        <th scope="col"><h6>Shipping Address</h6> </th>
+                        <th scope="col"><h6>Action</h6></th>
 
                     </tr>
                     </thead>

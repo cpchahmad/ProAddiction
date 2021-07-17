@@ -7,7 +7,7 @@
     <li class="
     @if (request()->is('customers'))
         active
-    @endif"><a href="{{route('customers')}}"><span class="fa fa-users"></span> Customers</a></li>
+    @endif"><a href="{{route('customers')}}"><span class="fa fa-users"></span>Agents</a></li>
     <li class="
     @if (request()->is('orders'))
         active

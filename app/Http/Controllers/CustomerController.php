@@ -221,7 +221,7 @@ class CustomerController extends Controller
     public function check_customer_email(Request $request){
 
         $customer = Customer::where('email',$request->email)->first();
-        dd($customer);
+
         if (isset($customer)){
             return response()->json([
                 'discount' => $customer->discount,

@@ -1,5 +1,13 @@
 @extends('layouts.main')
 @section('content')
+    <style>
+        .table_wrapper{
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    </style>
+
     @if( Session::has( 'success' ))
         {{ Session::get( 'success' ) }}
         <br>
@@ -141,7 +149,7 @@
         </div>
     </div>
         <div class="d-flex justify-content-between mb-3">
-            <h5>Customers</h5>
+            <h5>Agents</h5>
             <div>
 {{--                <a type="button" class="btn btn-info btn-lg" href="{{route('sync-customer')}}">Sync Customers</a>--}}
                 <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add New Agent</button>
@@ -152,19 +160,19 @@
             <div class="col-lg-12 pl-3">
 
 
-                <table class="table table-striped table-hover">
+                <table class="table table_wrapper table-striped table-hover">
                     <thead class="border-0">
                     <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Created At</th>
-                        <th scope="col">Phone Number</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Seller Area</th>
-                        <th scope="col">Zip Code</th>
-                        <th scope="col">Seller Color</th>
-                        <th scope="col">Discount in percentage</th>
-                        <th scope="col">Commission</th>
-                        <th scope="col">Action</th>
+                        <th scope="col"><h6>Name</h6></th>
+                        <th scope="col"><h6>Created At</h6> </th>
+                        <th scope="col"><h6>Phone Number</h6> </th>
+                        <th scope="col"><h6>Email</h6></th>
+                        <th scope="col"><h6>Seller Area</h6> </th>
+                        <th scope="col"><h6>Agent Code</h6> </th>
+                        <th scope="col"><h6>Seller Color</h6> </th>
+                        <th scope="col"><h6>Discount in percentage</h6>  </th>
+                        <th scope="col"><h6>Commission</h6></th>
+                        <th scope="col"><h6>Action</h6></th>
 
                     </tr>
                     </thead>
@@ -176,31 +184,31 @@
 
                         <td>{{\Carbon\Carbon::parse($customer->created_at)->format('d/m/Y')}}</td>
 
-                        <td>{{$customer->phone_no}}</td>
+                        <td>@if($customer->phone_no){{$customer->phone_no}} @else None @endif</td>
                         <td>{{$customer->email}}</td>
                         <td>
-                            {{$customer->seller_area}}
+                            @if($customer->seller_area){{$customer->seller_area}} @else None @endif
                         </td>
-                        <td>{{$customer->seller_code}}</td>
+                        <td>@if($customer->seller_code){{$customer->seller_code}} @else None @endif </td>
                         <td>
                             @if($customer->seller_color)
                             <div style="height: 30px;background-color: {{$customer->seller_color}};width: 30px;"></div>
                             @else
-                            none
+                            None
                             @endif
                         </td>
                         <td>
                             @if($customer->discount)
                             {{$customer->discount}}
                             @else
-                                none
+                                None
                             @endif
                         </td>
                         <td>
                             @if($customer->commission)
                             {{$customer->commission}}
                             @else
-                            none
+                            None
                             @endif
                         </td>
                         <td>

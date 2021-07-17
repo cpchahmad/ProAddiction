@@ -1,5 +1,13 @@
 @extends('layouts.main')
 @section('content')
+    <style>
+        .table_wrapper{
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    </style>
+
     @if( Session::has( 'success' ))
         {{ Session::get( 'success' ) }}
         <br>
@@ -16,24 +24,25 @@
         @if(count($orders)> 0)
             <div class="row" style="color: black;">
                 <div class="col-lg-12 pl-3">
-                    <table class="table table-striped table-hover">
+                    <table class="table table_wrapper table-striped table-hover">
                         <thead class="border-0">
                         <tr>
-                            <th scope="col">Order Id</th>
-                            <th scope="col">Date</th>
+                            <th scope="col"><h6>Order Id</h6></th>
+                            <th scope="col"><h6>Date</h6></th>
                             {{--<th scope="col">Total Order</th>--}}
-                            <th scope="col">Total Price</th>
-                            <th scope="col">Agent Name</th>
-
-                            <th scope="col">Seller Area</th>
-                            <th scope="col">Agent Color & Zip Code</th>
-                            <th scope="col">Commission Rate %</th>
-                            <th scope="col">Total Commission</th>
-                            <th scope="col">Discount %</th>
-                            <th scope="col">Customer Name</th>
-                            <th scope="col">Shipping Address</th>
+                            <th scope="col"><h6>Total Price</h6></th>
+                            <th scope="col"><h6>Agent Name</h6></th>
+                            <th scope="col"><h6>Seller Area</h6></th>
+                            <th scope="col"><h6>Agent Color & Code</h6></th>
+                            <th scope="col"><h6>Commission Rate %</h6></th>
+                            <th scope="col"><h6>Total Commission</h6></th>
+                            <th scope="col"><h6>Discount %</h6></th>
+                            <th scope="col"><h6>Customer Name</h6></th>
+                            <th scope="col"><h6>Shipping Address</h6></th>
                             <th></th>
+
                         </tr>
+
                         </thead>
                         <tbody>
 
@@ -102,25 +111,59 @@
                                     $shiping = json_decode($order->shiping_address)
                                 @endphp
                                 <div class="card-body">
-                                    @if($shiping != null)
-                                        <p style="font-size: 14px">Full Name: {{$shiping->first_name}} {{$shiping->last_name}}
-                                            @if(isset($shiping->company))
-                                                <br>Company: {{$shiping->company}}
-                                            @endif
-                                            <br>Address1: {{$shiping->address1}}
-                                            <br>Address2: {{$shiping->address2}}
-                                            <br>City: {{$shiping->city}}
-                                            <br>Province: {{$shiping->province}}
-                                            <br>Zip Code: {{$shiping->zip}}
-                                            <br>Country: {{$shiping->country}}
-                                            @if(isset($shiping->phone))
-                                                <br>Phone: {{$shiping->phone}}
-                                            @endif
-                                        </p>
-                                    @endif
+                                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#{{$order->id}}">View</button>
+                                    <div class="modal fade" id="{{$order->id}}" role="dialog">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Shipping Address</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @if($shiping != null)
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div><b>Full Name : </b> </div>
+                                                                <div><b>Company : </b></div>
+                                                                <div><b>Address1 :</b> </div>
+                                                                <div><b>Address2 :</b></div>
+                                                                <div><b>City :</b></div>
+                                                                <div><b>Province :</b> </div>
+                                                                <div><b>Zip Code : </b></div>
+                                                                <div><b>Country : </b></div>
+                                                                @if(isset($shiping->phone))
+                                                                    <div><b>Phone : </b></div>
+                                                                @endif
+
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div>@if($shiping->first_name){{$shiping->first_name}} {{$shiping->last_name}}@else None @endif</div>
+                                                                <div>@if($shiping->company){{$shiping->company}} @else None @endif</div>
+                                                                <div>@if($shiping->address1){{$shiping->address1}} @else None @endif</div>
+                                                                <div>@if($shiping->address2){{$shiping->address2}} @else None @endif</div>
+                                                                <div>@if($shiping->city){{$shiping->city}} @else None @endif</div>
+                                                                <div>@if($shiping->province){{$shiping->province}} @else None @endif </div>
+                                                                <div>@if($shiping->zip){{$shiping->zip}} @else None @endif </div>
+                                                                <div>@if($shiping->country){{$shiping->country}} @else None @endif</div>
+                                                                <div>@if($shiping->phone){{$shiping->phone}}@else None @endif</div>
+                                                            </div>
+
+                                                        </div>
+                                                    @endif
+                                                    <div class="mt-2"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 </td>
                                 <td>
+
+                                    <div class="card-body">
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirm_refund{{$order->id}}">
                                             Refund
                                         </button>
@@ -144,6 +187,8 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -157,4 +202,5 @@
     @else
             <p class="text-center">No Order Available.</p>
         @endif
+
 @endsection

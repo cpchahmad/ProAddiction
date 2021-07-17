@@ -13,7 +13,7 @@ class OrderController extends Controller
 {
     public function showAll()
     {
-        $orders = Order::latest()->paginate(20);
+        $orders = Order::latest()->paginate(10);
         return view('orders', compact('orders'));
     }
 
@@ -120,6 +120,7 @@ class OrderController extends Controller
     {
         $shop =Auth::user();
         $order = $shop->api()->rest('GET', '/admin/orders/'.$request->order_id.'.json');
+
         $order = json_decode(json_encode($order));
         $location = $shop->api()->rest('GET', '/admin/locations.json');
         $location = json_decode(json_encode($location));
@@ -148,8 +149,19 @@ class OrderController extends Controller
             ]);
         }
 
-        $refund = $shop->api()->rest('POST', '/admin/orders/'.$request->order_id.'/refunds.json', $refundData);
+        $refund = $shop->api()->rest('POST', '/admin/orders/'.$request->order_id.'/refunds/calculate.json', $refundData);
+
+        $updatestatus =
+            [
+               "order" => [
+                    "id"=> $request->order_id,
+                    "financial_status"=> "refunded",
+                ]
+            ];
+        $test = $shop->api()->rest('PUT', '/admin/orders/'.$request->order_id.'.json',$updatestatus);
+        dd($test);
         $refund = json_decode(json_encode($refund));
+
         if (!$refund->errors) {
             return redirect()->back()->with('success', 'Order Refunded Successfully');
         }

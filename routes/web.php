@@ -17,10 +17,8 @@ use App\State;
 
 
 Route::group(['middleware' => ['auth.shopify']], function () {
-    Route::get('/', function ()
-    {
-       return view('dashboard');
-    })->name('home');
+    Route::get('/', 'AdminController@dashboard')->name('home');
+
     Route::get('/customers', function ()
     {
 
