@@ -191,12 +191,15 @@ class CustomerController extends Controller
 
     }
 
-    public function createDiscount($request, $shop)
+    public function createDiscount($request, $shop,$customer)
     {
         $priceRule = $shop->api()->rest('post', '/admin/price_rules.json', [
             'price_rule' => [
                 'title' => "$request->discount"."OFFONEACHITEM".Carbon::now(),
-                'customer_selection' => 'all',
+                'customer_selection' => 'prerequisite',
+                "prerequisite_saved_search_ids"=> [
+                  $customer->id,
+                ],
                 'value' => '-'.$request->discount,
                 'value_type' => 'percentage',
                 'target_type' => "line_item",

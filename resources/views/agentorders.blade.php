@@ -72,23 +72,54 @@
                                     $shiping = json_decode($order->shiping_address)
                                 @endphp
                                 <div class="card-body">
-                                    @if($shiping != null)
-                                        <p style="font-size: 14px">Full
-                                            Name: {{$shiping->first_name}} {{$shiping->last_name}}
-                                            @if(isset($shiping->company))
-                                                <br>Company: {{$shiping->company}}
-                                            @endif
-                                            <br>Address1: {{$shiping->address1}}
-                                            <br>Address2: {{$shiping->address2}}
-                                            <br>City: {{$shiping->city}}
-                                            <br>Province: {{$shiping->province}}
-                                            <br>Zip Code: {{$shiping->zip}}
-                                            <br>Country: {{$shiping->country}}
-                                            @if(isset($shiping->phone))
-                                                <br>Phone: {{$shiping->phone}}
-                                            @endif
-                                        </p>
-                                    @endif
+                                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#{{$order->id}}">View</button>
+                                    <div class="modal fade" id="{{$order->id}}" role="dialog">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Shipping Address</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @if($shiping != null)
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div><b>Full Name : </b> </div>
+                                                                <div><b>Company : </b></div>
+                                                                <div><b>Address1 :</b> </div>
+                                                                <div><b>Address2 :</b></div>
+                                                                <div><b>City :</b></div>
+                                                                <div><b>Province :</b> </div>
+                                                                <div><b>Zip Code : </b></div>
+                                                                <div><b>Country : </b></div>
+                                                                @if(isset($shiping->phone))
+                                                                    <div><b>Phone : </b></div>
+                                                                @endif
+
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div>@if($shiping->first_name){{$shiping->first_name}} {{$shiping->last_name}}@else None @endif</div>
+                                                                <div>@if($shiping->company){{$shiping->company}} @else None @endif</div>
+                                                                <div>@if($shiping->address1){{$shiping->address1}} @else None @endif</div>
+                                                                <div>@if($shiping->address2){{$shiping->address2}} @else None @endif</div>
+                                                                <div>@if($shiping->city){{$shiping->city}} @else None @endif</div>
+                                                                <div>@if($shiping->province){{$shiping->province}} @else None @endif </div>
+                                                                <div>@if($shiping->zip){{$shiping->zip}} @else None @endif </div>
+                                                                <div>@if($shiping->country){{$shiping->country}} @else None @endif</div>
+                                                                <div>@if($shiping->phone){{$shiping->phone}}@else None @endif</div>
+                                                            </div>
+
+                                                        </div>
+                                                    @endif
+                                                    <div class="mt-2"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </td>
 
