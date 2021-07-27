@@ -17,6 +17,7 @@
     <link rel="icon" href="{{asset('css/polished-logo-small.png')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="{{asset('/')}}assets/toaster.min.css">
     <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
     </script>
     <style>
@@ -80,6 +81,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="{{asset('/')}}assets/toaster.min.js"></script>
+@if(Session::has('success'))
+    toastr.success("{{ Session::get('success') }}");
+@endif
+
+@if(Session::has('info'))
+    toastr.info("{{ Session::get('info') }}");
+@endif
+
+@if(Session::has('warning'))
+    toastr.warning("{{ Session::get('warning') }}");
+@endif
+
+@if(Session::has('error'))
+    toastr.error("{{ Session::get('error') }}");
+    @endif
+    </script>
 
 @yield('scripts')
 

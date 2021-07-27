@@ -34,7 +34,7 @@ class HomeController extends Controller
 
             $agent_coupen = $agent->coupon_code;
 
-            $agent_orders = Order::where('coupon_code', $agent_coupen)->get();
+            $agent_orders = Order::where('coupon_code', $agent_coupen)->where('refund',0)->get();
             $total_sales = $agent_orders->sum('total_price');
             $total_commission = ($agent->commission / 100 ) * $total_sales;
             $store_total_orders = Order::get()->count();
@@ -42,6 +42,7 @@ class HomeController extends Controller
 
             $ordersQ = Order::query()
                 ->where('coupon_code',$agent_coupen)
+                ->where('refund',0)
                 ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total, sum(total_price) as total_sum'))
                 ->groupBy('date')
                 ->newQuery();

@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
-    public function ShopifyCustomers($next = null){
+    public function ShopifyCustomers($next = null)
+    {
         $shop = Auth::user();
 
         $customers = $shop->api()->rest('GET', '/admin/customers.json', [
@@ -20,7 +21,7 @@ class CustomerController extends Controller
             'page_info' => $next
         ]);
         $customers = json_decode(json_encode($customers));
-        foreach ($customers->body->customers as $customer){
+        foreach ($customers->body->customers as $customer) {
             $this->createShopifyCustomer($customer, $shop);
         }
         if (isset($customers->link->next)) {
@@ -29,22 +30,24 @@ class CustomerController extends Controller
         return redirect()->back()->with('success', 'Customers synced successfully');
     }
 
-    public function createShopifyCustomer($customer, $shop){
+    public function createShopifyCustomer($customer, $shop)
+    {
+
         $c = Customer::where('shopify_id', $customer->id)->first();
-        if($c === null){
+        if ($c === null) {
             $c = new Customer();
         }
         $c->shopify_id = $customer->id;
-        if($c->email) {
+        if ($c->email) {
             $c->email = $customer->email;
-        }else{
+        } else {
             $c->email = 'none';
         }
         $c->first_name = $customer->first_name;
         $c->last_name = $customer->last_name;
         $c->email = $customer->email;
         $c->phone_no = $customer->phone;
-        if(isset($customer->addresses[0])) {
+        if (isset($customer->addresses[0])) {
             $c->seller_code = $customer->addresses[0]->zip;
             $c->seller_area = $customer->addresses[0]->address1 . ' ' . $customer->addresses[0]->address2;
         }
@@ -90,7 +93,7 @@ class CustomerController extends Controller
     public function addAgent(Request $request)
     {
 
-        $request -> validate([
+        $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|unique:customers',
@@ -98,8 +101,56 @@ class CustomerController extends Controller
         ]);
         $shop = Auth::user();
 
+        $customers = $shop->api()->rest('post', '/admin/customers.json', [
+
+            'customer' => [
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'addresses' => [0 => [
+                    'zip' => $request->seller_code,
+                    'address1' => $request->city . ' ' . $request->state . ' ' . $request->country,
+                ]
+                ],
+                "password" => $request->password,
+                "password_confirmation" => $request->password,
+                "metafields" =>
+                    array(
+                        0 =>
+                            array(
+                                "key" => 'is_agent',
+                                "value" => 1,
+                                "value_type" => "boolean",
+                                "namespace" => "customers",
+                            ),
+                        1 =>
+                            array(
+                                "key" => 'discount',
+                                "value" => $request->discount,
+                                "value_type" => "float",
+                                "namespace" => "customers",
+                            ),
+                        2 =>
+                            array(
+                                "key" => 'commission',
+                                "value" => $request->commission_rate,
+                                "value_type" => "float",
+                                "namespace" => "customers",
+                            ),
+                        3 =>
+                            array(
+                                "key" => 'seller_code',
+                                "value" => $request->seller_code,
+                                "value_type" => "string",
+                                "namespace" => "customers",
+                            ),
+                    ),
+
+            ]
+        ]);
+
         if (isset($request->discount)) {
-            list($couponCode, $price_rule_id) = $this->createDiscount($request, $shop);
+            list($couponCode, $price_rule_id) = $this->createDiscount($request, $shop,$customers);
         }
         else
             $couponCode = 'none';
@@ -120,87 +171,42 @@ class CustomerController extends Controller
         ]);
 
 
-        $customers = $shop->api()->rest('post', '/admin/customers.json', [
 
-            'customer' => [
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'addresses' =>  [ 0 => [
-                    'zip' => $request->seller_code,
-                    'address1' => $request->city.' '.$request->state.' '.$request->country,
-                ]
-                ],
-                "password" => $request->password,
-                "password_confirmation" => $request->password,
-                "metafields" =>
-                    array(
-                        0 =>
-                            array(
-                                "key" => 'is_agent',
-                                "value"=> 1,
-                                "value_type"=> "boolean",
-                                "namespace"=> "customers",
-                            ),
-                        1 =>
-                            array(
-                                "key" => 'discount',
-                                "value"=> $request->discount,
-                                "value_type"=> "float",
-                                "namespace"=> "customers",
-                            ),
-                        2 =>
-                            array(
-                                "key" => 'commission',
-                                "value"=> $request->commission_rate,
-                                "value_type"=> "float",
-                                "namespace"=> "customers",
-                            ),
-                        3 =>
-                            array(
-                                "key" => 'seller_code',
-                                "value"=> $request->seller_code,
-                                "value_type"=> "string",
-                                "namespace"=> "customers",
-                            ),
-                    ),
-
-                ]
-            ]);
-
-
-//        $customers = json_decode(json_encode($customers));
+        $customers = json_decode(json_encode($customers));
 //        $test = $shop->api()->rest('GET', '/admin/customers/'.$customers->body->customer->id.'/metafields.json');
 
-         $user = User::create([
-             'email' => $request->email,
-             'password' => Hash::make($request->password),
-             'customer_id' => $c->id,
-         ]);
+        $user = User::create([
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'customer_id' => $c->id,
+        ]);
         $user->assignRole('agent');
         return redirect()->back()->with('success', 'Agent Added Successfully');
 
+
     }
 
-    public  function customer_detail($id){
+    public function customer_detail($id)
+    {
 
         $customer = Customer::findorfail($id);
         return view('customerdetail')->with(
-            'customer',$customer
+            'customer', $customer
         );
 
     }
 
-    public function createDiscount($request, $shop,$customer)
+    public function createDiscount($request, $shop, $customers)
     {
+        $customers = json_decode(json_encode($customers));
         $priceRule = $shop->api()->rest('post', '/admin/price_rules.json', [
             'price_rule' => [
-                'title' => "$request->discount"."OFFONEACHITEM".Carbon::now(),
+                'title' => "$request->discount" . "OFFONEACHITEM" . Carbon::now(),
                 'customer_selection' => 'prerequisite',
-                "prerequisite_saved_search_ids"=> [
-                  $customer->id,
+                "prerequisite_customer_ids" => [
+                    $customers->body->customer->id
                 ],
-                'value' => '-'.$request->discount,
+                'value' => '-' . $request->discount,
                 'value_type' => 'percentage',
                 'target_type' => "line_item",
                 'target_selection' => "all",
@@ -209,31 +215,32 @@ class CustomerController extends Controller
             ]
         ]);
         $priceRule = json_decode(json_encode($priceRule));
-        $discountCode = $shop->api()->rest('post', '/admin/price_rules/'. $priceRule->body->price_rule->id .'/discount_codes.json', [
+        $discountCode = $shop->api()->rest('post', '/admin/price_rules/' . $priceRule->body->price_rule->id . '/discount_codes.json', [
             'discount_code' => [
                 'code' => $priceRule->body->price_rule->title,
             ]
         ]);
         $discountCode = json_decode(json_encode($discountCode));
-        if(!$discountCode->errors)
-        {
+        if (!$discountCode->errors) {
             return [$discountCode->body->discount_code->code, $discountCode->body->discount_code->price_rule_id];
         }
         return 'none';
     }
-    public function check_customer_email(Request $request){
 
-        $customer = Customer::where('email',$request->email)->first();
+    public function check_customer_email(Request $request)
+    {
 
-        if (isset($customer)){
+        $customer = Customer::where('email', $request->email)->first();
+
+        if (isset($customer)) {
             return response()->json([
                 'discount' => $customer->discount,
                 'coupon_code' => $customer->coupon_code,
                 'agent' => 'you are an agent',
             ]);
-        }else{
+        } else {
             return response()->json([
-               'agent' => 'you are not an agent',
+                'agent' => 'you are not an agent',
             ]);
         }
     }

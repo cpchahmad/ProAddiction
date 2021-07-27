@@ -15,10 +15,10 @@ class AdminController extends Controller
     {
 
             $total_orders = Order::get();
-            $total_sales = $total_orders->sum('total_price');
+            $total_sales = Order::where('refund',0)->sum('total_price');
             $agents_commission = Customer::sum('commission');
             $total_commission = ($agents_commission / 100 ) * $total_sales;
-            $agent_orders = Order::whereNotNull('coupon_code')->get();
+            $agent_orders = Order::whereNotNull('coupon_code')->where('refund',0)->get();
             $agentorders_sale = $agent_orders->sum('total_price');
             $ordersQ = Order::query()
                 ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total, sum(total_price) as total_sum'))
