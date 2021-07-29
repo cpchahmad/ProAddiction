@@ -12,19 +12,33 @@
 
     <div class="col-lg-10 col-md-9 p-4">
         <div class="row ">
-            <div class="col-md-8 pl-3 pt-2">
+            <div class="col-md-4 pl-3 pt-2">
                 <div class="pl-3">
                     <h3>Dashboard</h3>
                 </div>
             </div>
+
             <div class="col-4 ms-auto d-inline-flex">
 
-                <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                <div class="prepend">
+                   <select name="sell_area" id="agent_sellarea" style="background: #fff; margin-left: 25px; cursor: pointer; padding: 12px 10px; border: 1px solid #ccc; width: 100%">
+                    @foreach($agent_sellareas as $agent_sellarea)
+                       <option value="{{$agent_sellarea->city}}">{{$agent_sellarea->city}}</option>
+                       @endforeach
+                   </select>
+
+                </div>
+
+            </div>
+
+            <div class="col-4 ms-auto d-inline-flex">
+
+                <div id="reportrange" style="background: #fff; cursor: pointer; padding: 10px 10px; border: 1px solid #ccc; width: 100%">
                     <i class="fa fa-calendar"></i>&nbsp;
                     <span>{{$date_range}}</span> <i class="fa fa-caret-down"></i>
                 </div>
-                <button class="btn btn-primary filter_by_date" data-url="{{route('agenthome')}}" style="margin-left: 10px"> Filter </button>
-
+                <button class="btn btn-primary filter_by_date" data-url="{{route('agenthome')}}"> Filter </button>
+                <button class="btn btn-secondary clear_filter_data"> Clear </button>
             </div>
         </div>
 
@@ -39,7 +53,7 @@
                             <div class="media-body p-2">
                                 <h6 class="media-title m-0">Total Orders</h6>
                                 <div class="media-text">
-                                    <h3>{{count($agent_orders)}}</h3>
+                                    <h3>{{$agent_orders->count()}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -58,6 +72,28 @@
                     </div>
 
                     <div class="col-md-6 col-lg-3 col-12 mb-2 col-sm-6">
+                        <div class="media shadow-sm p-0 bg-info-lighter text-light rounded ">
+                            <span class="oi top-0 rounded-left bg-white text-info h-100 p-4 oi-tag fs-5"></span>
+                            <div class="media-body p-2">
+                                <h6 class="media-title m-0">Total Products</h6>
+                                <div class="media-text">
+                                    <h3>{{$agent_total_products}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 col-12 mb-2 col-sm-6">
+                        <div class="media shadow-sm p-0 bg-info-lighter text-light rounded ">
+                            <span class="oi top-0 rounded-left bg-white text-info h-100 p-4 oi-tag fs-5"></span>
+                            <div class="media-body p-2">
+                                <h6 class="media-title m-0">Total Refunds</h6>
+                                <div class="media-text">
+                                    <h3>{{number_format($refund_orders->sum('total_price'),2)}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 col-12 mb-2 col-sm-6">
                         <div class="media shadow-sm p-0 bg-warning-lighter text-primary-darker rounded ">
                             <span class="oi top-0 rounded-left bg-white text-warning h-100 p-4 oi-cart fs-5"></span>
                             <div class="media-body p-2">
@@ -68,7 +104,6 @@
                             </div>
                         </div>
                     </div>
-
 
                 </div>
             </div>
@@ -85,8 +120,8 @@
                             <div class="col-sm-3 col-6 mb-2">
                                 <div class="text-center">
                                     <div class="fs-smaller">
-                                        <span class="oi oi-caret-top fs-smallest mr-1 text-primary"></span>{{number_format((count($agent_orders) / $store_total_orders) * 100,2)}}%</div>
-                                    <div class="fw-bold">{{number_format(count($agent_orders),2)}}</div>
+                                        <span class="oi oi-caret-top fs-smallest mr-1 text-primary"></span>{{number_format(($agent_orders->count() / $store_total_orders) * 100,2)}}%</div>
+                                    <div class="fw-bold">{{number_format($agent_orders->count(),2)}}</div>
                                     <div>Total Orders</div>
                                 </div>
                             </div>
@@ -119,9 +154,9 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-4">
-                                <h6>Orders <small>{{number_format((count($agent_orders) / $store_total_orders) * 100,2)}}%</small></h6>
+                                <h6>Orders <small>{{number_format(($agent_orders->count() / $store_total_orders) * 100,2)}}%</small></h6>
                                 <div class="progress">
-                                    <div style="width: {{(count($agent_orders) / $store_total_orders) * 100}}%" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div style="width: {{($agent_orders->count() / $store_total_orders) * 100}}%" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <br>
                                 <h6>Sales <small>{{number_format(($total_sales / $store_total_sales) * 100 ,2)}}%</small></h6>
@@ -293,12 +328,16 @@
                 }
                 $('body').on('click','.filter_by_date', function() {
                     let daterange_string = $('#reportrange').find('span').text();
-                    if(daterange_string !== '' && daterange_string !== 'Select Date Range'){
-                        window.location.href = $(this).data('url')+'?date-range='+daterange_string;
-                    }
-                    else{
-                        // alertify.error('Please Select Range');
-                    }
+                    var selected_value = $('#agent_sellarea').find(":selected").text();
+
+                        window.location.href = $(this).data('url')+'?date-range='+daterange_string+'&sell_area='+selected_value;
+
+                });
+
+                $('body').on('click','.clear_filter_data', function() {
+
+                    window.location.href = '/agenthome';
+
                 });
 
             });

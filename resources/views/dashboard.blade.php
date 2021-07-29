@@ -11,22 +11,55 @@
 
 
         <div class="row ">
-            <div class="col-md-8 pl-3 pt-2">
+            <div class="col-md-4 pl-3 pt-2">
                 <div class="pl-3">
                     <h3>Dashboard</h3>
                 </div>
             </div>
-            <div class="col-4 ms-auto d-inline-flex">
 
-                <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                    <i class="fa fa-calendar"></i>&nbsp;
-                    <span>{{$date_range}}</span> <i class="fa fa-caret-down"></i>
-                </div>
-                <button class="btn btn-primary filter_by_date" data-url="{{route('home')}}" style="margin-left: 10px"> Filter </button>
-
-            </div>
         </div>
 
+    <div class="row">
+        <div class="col-md-3">
+            <select name="products" id="products" style="background: #fff; margin-left: 25px; cursor: pointer; padding: 12px 10px; border: 1px solid #ccc; width: 100%">
+                                     <option selected disabled>Select Product</option>
+                                        @foreach($sold_products as $sold_product)
+                                            <option value="{{$sold_product->shopify_product_id}}">{{$sold_product->title}}</option>
+                                        @endforeach
+            </select>
+
+        </div>
+
+        <div class="col-md-3">
+            <select name="agent_names" id="agent_names" style="background: #fff; margin-left: 25px; cursor: pointer; padding: 12px 10px; border: 1px solid #ccc; width: 100%">
+                <option selected disabled>Select Agent Name</option>
+            @foreach($agent_names as $agent_name)
+                    <option value="{{$agent_name->email}}">{{$agent_name->first_name}} {{$agent_name->last_name}}   {!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!}  {!! $agent_name->seller_code !!} </option>
+                @endforeach
+            </select>
+
+        </div>
+
+        <div class="col-md-2">
+            <select id="sell_area" name="sell_area" style="background: #fff; margin-left: 25px; cursor: pointer; padding: 12px 10px; border: 1px solid #ccc; width: 100%">
+                <option selected disabled>Select Area</option>
+            @foreach($sell_areas as $sell_area)
+                    <option value="{{$sell_area->city}}">{{$sell_area->city}}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-4 ms-auto d-inline-flex">
+
+            <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                <i class="fa fa-calendar"></i>&nbsp;
+                <span>{{$date_range}}</span> <i class="fa fa-caret-down"></i>
+            </div>
+            <button class="btn btn-primary filter_by_date" data-url="{{route('home')}}" style="margin-left: 10px"> Filter </button>
+            <button class="btn btn-secondary clear_filter_data"> Clear </button>
+
+        </div>
+    </div>
         <!-- start info box -->
         <div class="row ">
             <div class="col-md-12 pl-3 pt-2">
@@ -38,7 +71,7 @@
                             <div class="media-body p-2">
                                 <h6 class="media-title m-0">Total Orders</h6>
                                 <div class="media-text">
-                                    <h3>{{count($total_orders)}}</h3>
+                                    <h3>{{$total_orders->count()}}</h3>
                                 </div>
                             </div>
                         </div>
@@ -57,6 +90,31 @@
                     </div>
 
                     <div class="col-md-6 col-lg-3 col-12 mb-2 col-sm-6">
+                        <div class="media shadow-sm p-0 bg-info-lighter text-light rounded ">
+                            <span class="oi top-0 rounded-left bg-white text-info h-100 p-4 oi-tag fs-5"></span>
+                            <div class="media-body p-2">
+                                <h6 class="media-title m-0">Total Products</h6>
+                                <div class="media-text">
+                                    <h3>{{$total_products}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 col-12 mb-2 col-sm-6">
+                        <div class="media shadow-sm p-0 bg-info-lighter text-light rounded ">
+                            <span class="oi top-0 rounded-left bg-white text-info h-100 p-4 oi-tag fs-5"></span>
+                            <div class="media-body p-2">
+                                <h6 class="media-title m-0">Total Refunds</h6>
+                                <div class="media-text">
+                                    <h3>{{$total_refund_orders->count()}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6 col-lg-3 col-12 mb-2 col-sm-6">
                         <div class="media shadow-sm p-0 bg-warning-lighter text-primary-darker rounded ">
                             <span class="oi top-0 rounded-left bg-white text-warning h-100 p-4 oi-cart fs-5"></span>
                             <div class="media-body p-2">
@@ -67,18 +125,6 @@
                             </div>
                         </div>
                     </div>
-
-{{--                    <div class="col-md-6 col-lg-3 col-12 mb-2 col-sm-6">--}}
-{{--                        <div class="media shadow-sm p-0 bg-info-lighter text-light rounded ">--}}
-{{--                            <span class="oi top-0 rounded-left bg-white text-info h-100 p-4 oi-tag fs-5"></span>--}}
-{{--                            <div class="media-body p-2">--}}
-{{--                                <h6 class="media-title m-0">Total Products</h6>--}}
-{{--                                <div class="media-text">--}}
-{{--                                    <h3>23</h3>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
 
                 </div>
             </div>
@@ -95,23 +141,25 @@
                             <div class="col-sm-3 col-6 mb-2">
                                 <div class="text-center">
                                     <div class="fs-smaller">
-                                        <span class="oi oi-caret-top fs-smallest mr-1 text-primary"></span>@if(count($total_orders) != 0){{number_format((count($agent_orders) / count($total_orders)) * 100,2)}}% @endif</div>
-                                    <div class="fw-bold">{{number_format(count($total_orders),2)}}</div>
+                                        <span class="oi oi-caret-top fs-smallest mr-1 text-primary"></span>@if($total_orders->count() != 0){{number_format((count($agent_orders) / $total_orders->count()) * 100,2)}}% @endif</div>
+                                    <div class="fw-bold">{{number_format($total_orders->count(),2)}}</div>
                                     <div>Total Orders</div>
                                 </div>
                             </div>
                             <div class="col-sm-3 col-6 mb-2">
                                 <div class="text-center">
                                     <div class="fs-smaller">
+
                                         <span class="oi oi-caret-top fs-smallest mr-1 text-success"></span>@if($total_sales != 0){{number_format(($agentorders_sale / $total_sales) * 100 ,2)}}% @endif</div>
                                     <div class="fw-bold">{{number_format($total_sales,2)}}</div>
                                     <div>Total Sales</div>
                                 </div>
                             </div>
+
                             <div class="col-sm-3 col-6 mb-2">
                                 <div class="text-center">
                                     <div class="fs-smaller">
-                                        <span class="oi oi-caret-top  fs-smallest mr-1 text-warning"></span>@if($total_commission != 0){{number_format(($total_sales / $total_commission) * 100 ,2)}}% @endif</div>
+                                        <span class="oi oi-caret-top  fs-smallest mr-1 text-warning"></span>@if($total_commission != 0){{number_format($total_commission / $total_sales * 100 ,2)}}% @endif</div>
                                     <div class="fw-bold">{{number_format($total_commission,2)}}</div>
                                     <div>Total Commission</div>
                                 </div>
@@ -129,9 +177,9 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-4">
-                                <h6>Orders <small>@if(count($total_orders) != 0)){{number_format((count($agent_orders) / count($total_orders)) * 100,2)}}% @endif</small></h6>
+                                <h6>Orders <small>@if($total_orders->count() != 0)){{number_format((count($agent_orders) / $total_orders->count()) * 100,2)}}% @endif</small></h6>
                                 <div class="progress">
-                                    <div style="width: @if(count($total_orders) != 0){{(count($agent_orders) / count($total_orders)) * 100}}%" @endif class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div style="width: @if($total_orders->count() != 0){{(count($agent_orders) / $total_orders->count()) * 100}}%" @endif class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <br>
                                 <h6>Sales <small>@if($total_sales != 0){{number_format(($agentorders_sale / $total_sales) * 100 ,2)}}% @endif</small></h6>
@@ -139,9 +187,9 @@
                                     <div style="width: @if($total_sales != 0){{($agentorders_sale / $total_sales) * 100 }}%" @endif class="progress-bar bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <br>
-                                <h6>Commission <small>@if($total_commission != 0){{number_format(($total_sales / $total_commission) * 100 ,2)}}% @endif</small></h6>
+                                <h6>Commission <small>@if($total_commission != 0){{number_format(($total_commission / $total_sales) * 100 ,2)}}% @endif</small></h6>
                                 <div class="progress">
-                                    <div style="width: @if($total_commission != 0){{($total_sales / $total_commission) * 100 }}%" @endif class="progress-bar bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div style="width: @if($total_commission != 0){{($total_commission / $total_sales) * 100 }}%" @endif class="progress-bar bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
 
                             </div>
@@ -298,13 +346,19 @@
             }
             $('body').on('click','.filter_by_date', function() {
                 let daterange_string = $('#reportrange').find('span').text();
-                if(daterange_string !== '' && daterange_string !== 'Select Date Range'){
-                    window.location.href = $(this).data('url')+'?date-range='+daterange_string;
-                }
-                else{
-                    // alertify.error('Please Select Range');
-                }
+                var selected_area_value = $("#sell_area option:selected").val();
+                var selected_agent_name = $("#agent_names option:selected").val() ;
+                var selected_product = $("#products option:selected").val();
+                window.location.href = $(this).data('url')+'?date-range='+daterange_string+'&sell_area='+selected_area_value+'&agent_names='+selected_agent_name+'&products='+selected_product;
+
             });
+
+            $('body').on('click','.clear_filter_data', function() {
+
+                window.location.href = '/';
+
+            });
+
 
         });
     </script>

@@ -75,5 +75,7 @@ Route::get('/agent-order-history', 'AgentController@index')->name('agent-order-h
 Route::get('/agent-order-view/{id}', 'AgentController@order_detail')->name('agent-order-view')->middleware('auth');
 
 Route::get('/agenthome', 'HomeController@index')->name('agenthome');
+Route::post('/sell-area', 'HomeController@index')->name('sell-area');
+
 
 Route::get('logout', 'LoginController@logout');

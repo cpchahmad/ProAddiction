@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Agent_City;
 use App\Commission;
 use App\Customer;
 use App\Order;
+use App\Order_line_Item;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use App\User;
 use Illuminate\Http\Request;
@@ -78,14 +81,21 @@ class OrderController extends Controller
             }
             $c->shop_id = $shop->id;
             $c->save();
+
         } else
             $o->customer_name = 'none';
-        if (isset($order->shipping_address))
-            $o->shiping_address = json_encode($order->shipping_address);
+
+        if (isset($order->shipping_address)) {
+            $shipping_address = json_encode($order->shipping_address);
+            $agent_sellares = json_decode(json_encode($order->shipping_address));
+            $o->shiping_address = $shipping_address;
+            $o->agent_sellarea = $agent_sellares->address1;
+        }
         else
             $o->shiping_address = 'none';
         if ($order->discount_codes)
             $o->coupon_code = $order->discount_codes[0]->code;
+
         else
             $o->coupon_code = 'none';
         $o->shop_id = $shop->id;
@@ -99,6 +109,34 @@ class OrderController extends Controller
             $commission->commission = $this->calculateCommission($order->total_price, $o->agent->commission);
             $commission->save();
         }
+
+            if ($order->discount_codes){
+                $agent_city = new Agent_City();
+                $agent_city->agent_code = $order->discount_codes[0]->code;
+                if (isset($order->shipping_address)){
+                    $shipping_address = json_decode(json_encode($order->shipping_address));
+                    $agent_city->city = $shipping_address->address1;
+                }
+                $agent_city->save();
+            }
+
+        foreach ($order->line_items as $item) {
+            $line_item = Order_line_Item::where('shopify_order_id', $item->id)->first();
+            if ($line_item == null) {
+                $line_item = new Order_line_Item();
+            }
+            $line_item->order_id = $o->id;
+            $line_item->shopify_order_id = $item->id;
+            $line_item->shopify_product_id = $item->product_id;
+            $line_item->sku = $item->sku;
+            $line_item->title = $item->title;
+            $line_item->price = $item->price;
+            $line_item->quantity = $item->quantity;
+            $line_item->item_src = (!empty($item->image))?$item->image:'';
+            $line_item->save();
+
+        }
+
     }
 
     public function createCommissionOfAgent($agentId, $orderId, $totalPrice, $commission)
@@ -149,6 +187,7 @@ class OrderController extends Controller
         $calculatedrefund = json_decode(json_encode($calculatedrefund));
 //                dd($calculatedrefund);
         if ($calculatedrefund->errors == 'true') {
+
             Session::flash('info', 'Order has already been Refunded');
             return back();
         }

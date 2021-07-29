@@ -104,7 +104,7 @@
                         <div class="form-group">
                             <div class="col-sm-12">
                                 <div class="form-material">
-                                    <label for="material-error">Zip Code </label>
+                                    <label for="material-error">Agent Code </label>
                                     <input  class="form-control" type="text"  name="seller_code"
                                             value=""   placeholder="Enter Your Seller Code">
                                 </div>
