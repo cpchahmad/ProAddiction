@@ -36,6 +36,7 @@
                             <th scope="col"><h6>Agent Color & Code</h6></th>
                             <th scope="col"><h6>Commission Rate %</h6></th>
                             <th scope="col"><h6>Total Commission</h6></th>
+                            <th scope="col"><h6>Total Refunded</h6></th>
                             <th scope="col"><h6>Discount %</h6></th>
                             <th scope="col"><h6>Customer Name</h6></th>
                             <th scope="col"><h6>Shipping Address</h6></th>
@@ -97,6 +98,15 @@
                                         0
                                     @endif
                                 </td>
+
+                                <td>
+                                    @if($order->status == 0 && $order->refund == 1)
+                                        {{$order->total_price}}
+                                    @else
+                                        0
+                                    @endif
+                                </td>
+
                                 <td>
                                     @if($order->agent != null)
                                         {{$order->agent->discount}}
@@ -163,10 +173,9 @@
                                 </td>
                                 <td>
 
+                                    @if($order->status == 1 && $order->refund == 0)
                                     <div class="card-body">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirm_refund{{$order->id}}">
-                                            Refund
-                                        </button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirm_refund{{$order->id}}">Refund</button>
                                         <div class="modal fade" id="confirm_refund{{$order->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
@@ -189,6 +198,7 @@
                                         </div>
 
                                     </div>
+                                        @endif
                                 </td>
                             </tr>
                         @endforeach
