@@ -65,7 +65,11 @@ class AdminController extends Controller
                     }
 
                     if ($request->input('sell_area') != 'Select Area') {
-                        $orders = $orders->Where('agent_sellarea', $request->sell_area);
+                        if ($request->filled('date-range')) {
+                            $orders = $orders->Where('agent_sellarea', $request->sell_area);
+                        }else{
+                            $orders = $total_orders->Where('agent_sellarea', $request->sell_area);
+                        }
                         dd($orders);
                         $products = Order_line_Item::whereIn('order_id', $orders->get()->pluck('id')->toArray());
                         $total_products = $products->sum('quantity');
@@ -84,8 +88,13 @@ class AdminController extends Controller
 
                     if ($request->input('agent_names') != 'Select Agent Name') {
                         $agent_name = Customer::where('email', $request->agent_names)->first();
-                        $orders = $total_orders->Where('coupon_code', $agent_name->coupon_code);
+                        if ($request->filled('date-range')) {
+                            $orders = $orders->Where('coupon_code', $agent_name->coupon_code);
 
+                        }else{
+                            $orders = $total_orders->Where('coupon_code', $agent_name->coupon_code);
+
+                        }
                         if (isset($orders)) {
                             $products = Order_line_Item::whereIn('order_id', $orders->get()->pluck('id')->toArray());
                             $total_products = $products->sum('quantity');
