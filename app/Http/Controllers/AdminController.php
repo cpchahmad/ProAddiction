@@ -121,12 +121,14 @@ class AdminController extends Controller
 
                         $products = $all_products->Where('shopify_product_id', $request->products);
 
-                        if ($request->input('date-range') != 'Select Date Range') {
+                        if ($request->input('date-range') != 'Select Date Range')
+                            $orders = $orders->whereIn('id', $products->pluck('order_id')->toArray());
+                        elseif ($request->input('sell_area') != 'Select Area')
                             $orders = $orders->whereIn('id', $products->pluck('order_id')->toArray());
 
-                        }elseif ($request->input('sell_area') != 'Select Area'){
+                        elseif ($request->input('agent_names') != 'Select Agent Name'){
                             $orders = $orders->whereIn('id', $products->pluck('order_id')->toArray());
-                        }
+
                         else{
                             $orders = $total_orders->whereIn('id', $products->pluck('order_id')->toArray());
 
