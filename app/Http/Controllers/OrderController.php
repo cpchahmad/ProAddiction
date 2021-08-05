@@ -90,8 +90,7 @@ class OrderController extends Controller
             $agent_sellares = json_decode(json_encode($order->shipping_address));
             $o->shiping_address = $shipping_address;
             $o->agent_sellarea = $agent_sellares->address1;
-        }
-        else
+        } else
             $o->shiping_address = 'none';
 
         if (isset($order->discount_codes[0]))
@@ -109,18 +108,15 @@ class OrderController extends Controller
             $commission->commission = $this->calculateCommission($order->total_price, $o->agent->commission);
             $commission->save();
         }
-
-            if ($order->discount_codes){
-                $agent_city = new Agent_City();
-                $agent_city->agent_code = $order->discount_codes[0]->code;
-                if ($order->shipping_address){
-                    $shipping_address = json_decode(json_encode($order->shipping_address));
-                    dd($shipping_address);
-                    $agent_city->city = $shipping_address->city;
-
-                }
-                $agent_city->save();
-            }
+        $agent_city = new Agent_City();
+        if ($order->discount_codes) {
+            $agent_city->agent_code = $order->discount_codes[0]->code;
+        }
+        if ($order->shipping_address) {
+            $shipping_address = json_decode(json_encode($order->shipping_address));
+            $agent_city->city = $shipping_address->city;
+        }
+        $agent_city->save();
 
         foreach ($order->line_items as $item) {
             $line_item = Order_line_Item::where('shopify_order_id', $item->id)->first();
@@ -134,7 +130,7 @@ class OrderController extends Controller
             $line_item->title = $item->title;
             $line_item->price = $item->price;
             $line_item->quantity = $item->quantity;
-            $line_item->item_src = (!empty($item->image))?$item->image:'';
+            $line_item->item_src = (!empty($item->image)) ? $item->image : '';
             $line_item->save();
 
         }
