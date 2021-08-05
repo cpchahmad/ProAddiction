@@ -93,13 +93,13 @@ class CustomerController extends Controller
     public function addAgent(Request $request)
     {
 
-//
-//        $request->validate([
-//            'first_name' => 'required',
-//            'last_name' => 'required',
-//            'email' => 'required|unique:customers',
-//            'phone_no' => 'required|unique:customers',
-//        ]);
+
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|unique:customers',
+            'phone_no' => 'required|unique:customers',
+        ]);
         $shop = Auth::user();
 
         $customers = $shop->api()->rest('post', '/admin/customers.json', [
