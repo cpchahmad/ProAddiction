@@ -25,7 +25,7 @@ class AdminController extends Controller
             $agentorders_sale = $agent_orders->sum('total_price');
             $total_products = Order_line_Item::sum('quantity');
             $total_refunds_orders = Order::where('refund', 1)->newQuery();
-        $sell_areas = Agent_City::whereNotNull()->get();
+        $sell_areas = Agent_City::whereNotNull('city')->get();
         $agent_names = Customer::get();
         $all_products = Order_line_Item::get();
         $sold_products =  $all_products->unique('shopify_product_id');    //now products are not duplicate
