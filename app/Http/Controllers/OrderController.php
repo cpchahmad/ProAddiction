@@ -110,14 +110,14 @@ class OrderController extends Controller
             $commission->save();
         }
 
-        dd($order->shipping_address);
+
             if ($order->discount_codes){
                 $agent_city = new Agent_City();
                 $agent_city->agent_code = $order->discount_codes[0]->code;
-                if (isset($order->shipping_address)){
+                if ($order->shipping_address){
                     $shipping_address = json_decode(json_encode($order->shipping_address));
-                    $agent_city->city = $shipping_address->address1;
-                    dd($agent_city->city);
+                    $agent_city->city = $shipping_address->city;
+
                 }
                 $agent_city->save();
             }
