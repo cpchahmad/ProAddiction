@@ -51,7 +51,6 @@ class AdminController extends Controller
                             ->groupBy('date')
                             ->get();
 
-                        dd($total_orders);
                         $total_sales = $total_orders->sum('total_price');
                         $agent_orders = $agent_orders->whereBetween('created_at', [$comparing_start_date, $comparing_end_date]);
                         $agentorders_sale = $agent_orders->sum('total_price');
@@ -66,7 +65,7 @@ class AdminController extends Controller
                     }
 
                     if ($request->input('sell_area') != 'Select Area') {
-                        $orders = $total_orders->Where('agent_sellarea', $request->sell_area);
+                        $orders = $orders->Where('agent_sellarea', $request->sell_area);
                         dd($orders);
                         $products = Order_line_Item::whereIn('order_id', $orders->get()->pluck('id')->toArray());
                         $total_products = $products->sum('quantity');
