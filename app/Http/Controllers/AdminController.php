@@ -115,7 +115,13 @@ class AdminController extends Controller
                     if ($request->input('products') != 'Select Product') {
 
                         $products = $all_products->Where('shopify_product_id', $request->products);
-                        $orders = Order::whereIn('id', $products->pluck('order_id')->toArray());
+                        dd($orders);
+                        if ($request->input('date-range') != 'Select Date Range') {
+                            $orders = $orders->whereIn('id', $products->pluck('order_id')->toArray());
+                        }else{
+                            $orders = $total_orders->whereIn('id', $products->pluck('order_id')->toArray());
+
+                        }
                         $total_products = $products->count();
                         $total_orders = $orders
                             ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total, sum(total_price) as total_sum'))
