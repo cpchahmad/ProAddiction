@@ -124,7 +124,10 @@ class AdminController extends Controller
                         if ($request->input('date-range') != 'Select Date Range') {
                             $orders = $orders->whereIn('id', $products->pluck('order_id')->toArray());
 
-                        }else{
+                        }elseif ($request->input('sell_area') != 'Select Area'){
+                            $orders = $orders->whereIn('id', $products->pluck('order_id')->toArray());
+                        }
+                        else{
                             $orders = $total_orders->whereIn('id', $products->pluck('order_id')->toArray());
 
                         }
