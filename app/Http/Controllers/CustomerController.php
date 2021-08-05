@@ -93,12 +93,13 @@ class CustomerController extends Controller
     public function addAgent(Request $request)
     {
 
-        $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|unique:customers',
-            'phone_no' => 'required|unique:customers',
-        ]);
+//
+//        $request->validate([
+//            'first_name' => 'required',
+//            'last_name' => 'required',
+//            'email' => 'required|unique:customers',
+//            'phone_no' => 'required|unique:customers',
+//        ]);
         $shop = Auth::user();
 
         $customers = $shop->api()->rest('post', '/admin/customers.json', [
@@ -169,8 +170,6 @@ class CustomerController extends Controller
             'commission' => $request->commission_rate,
             'price_rule_id' => $price_rule_id,
         ]);
-
-
 
         $customers = json_decode(json_encode($customers));
 //        $test = $shop->api()->rest('GET', '/admin/customers/'.$customers->body->customer->id.'/metafields.json');

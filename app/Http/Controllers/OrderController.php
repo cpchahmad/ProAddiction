@@ -93,6 +93,7 @@ class OrderController extends Controller
         }
         else
             $o->shiping_address = 'none';
+        dd($order);
         if ($order->discount_codes)
             $o->coupon_code = $order->discount_codes[0]->code;
 
