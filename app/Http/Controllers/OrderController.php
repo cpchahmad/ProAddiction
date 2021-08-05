@@ -89,7 +89,7 @@ class OrderController extends Controller
             $shipping_address = json_encode($order->shipping_address);
             $agent_sellares = json_decode(json_encode($order->shipping_address));
             $o->shiping_address = $shipping_address;
-            $o->agent_sellarea = $agent_sellares->address1;
+            $o->agent_sellarea = $agent_sellares->city;
         } else
             $o->shiping_address = 'none';
 
@@ -112,7 +112,7 @@ class OrderController extends Controller
         if ($order->discount_codes) {
             $agent_city->agent_code = $order->discount_codes[0]->code;
         }
-        if ($order->shipping_address) {
+        if (isset($order->shipping_address)) {
             $shipping_address = json_decode(json_encode($order->shipping_address));
             $agent_city->city = $shipping_address->city;
         }
