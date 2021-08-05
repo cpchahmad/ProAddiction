@@ -65,7 +65,7 @@ class AdminController extends Controller
                     }
 
                     if ($request->input('sell_area') != 'Select Area') {
-                        if ($request->filled('date-range')) {
+                        if ($request->input('date-range') != 'Select Date Range') {
                             $orders = $orders->Where('agent_sellarea', $request->sell_area);
                         }else{
                             $orders = $total_orders->Where('agent_sellarea', $request->sell_area);
@@ -88,7 +88,7 @@ class AdminController extends Controller
 
                     if ($request->input('agent_names') != 'Select Agent Name') {
                         $agent_name = Customer::where('email', $request->agent_names)->first();
-                        if ($request->filled('date-range')) {
+                        if ($request->input('date-range') != 'Select Date Range') {
                             $orders = $orders->Where('coupon_code', $agent_name->coupon_code);
 
                         }else{
