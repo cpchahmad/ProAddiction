@@ -110,7 +110,6 @@ class OrderController extends Controller
             $commission->save();
         }
 
-
             if ($order->discount_codes){
                 $agent_city = new Agent_City();
                 $agent_city->agent_code = $order->discount_codes[0]->code;
