@@ -115,6 +115,7 @@ class OrderController extends Controller
                 $agent_city->agent_code = $order->discount_codes[0]->code;
                 if ($order->shipping_address){
                     $shipping_address = json_decode(json_encode($order->shipping_address));
+                    dd($shipping_address);
                     $agent_city->city = $shipping_address->city;
 
                 }
