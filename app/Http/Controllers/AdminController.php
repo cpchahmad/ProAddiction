@@ -84,8 +84,8 @@ class AdminController extends Controller
 
                     if ($request->input('agent_names') != 'Select Agent Name') {
                         $agent_name = Customer::where('email', $request->agent_names)->first();
-                        dd($agent_name);
                         $orders = $orders->Where('coupon_code', $agent_name->coupon_code);
+                        dd($orders);
 
                         if (isset($orders)) {
                             $products = Order_line_Item::whereIn('order_id', $orders->get()->pluck('id')->toArray());
