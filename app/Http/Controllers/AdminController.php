@@ -118,10 +118,9 @@ class AdminController extends Controller
 
                         if ($request->input('date-range') != 'Select Date Range') {
                             $orders = $orders->whereIn('id', $products->pluck('order_id')->toArray());
-                            dd($orders->get(),1);
+
                         }else{
                             $orders = $total_orders->whereIn('id', $products->pluck('order_id')->toArray());
-                            dd($orders->get(),2);
 
                         }
                         $total_products = $products->count();
