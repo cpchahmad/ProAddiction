@@ -116,6 +116,7 @@ class OrderController extends Controller
                 if (isset($order->shipping_address)){
                     $shipping_address = json_decode(json_encode($order->shipping_address));
                     $agent_city->city = $shipping_address->address1;
+                    dd($agent_city->city);
                 }
                 $agent_city->save();
             }
