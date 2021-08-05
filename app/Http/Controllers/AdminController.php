@@ -126,7 +126,7 @@ class AdminController extends Controller
                         elseif ($request->input('sell_area') != 'Select Area')
                             $orders = $orders->whereIn('id', $products->pluck('order_id')->toArray());
 
-                        elseif ($request->input('agent_names') != 'Select Agent Name'){
+                        elseif ($request->input('agent_names') != 'Select Agent Name')
                             $orders = $orders->whereIn('id', $products->pluck('order_id')->toArray());
 
                         else{
