@@ -46,12 +46,12 @@ class AdminController extends Controller
                         $comparing_end_date = Carbon::parse($end_date)->format('Y-m-d') . ' 23:59:59';
 
                         $orders = $total_orders->whereBetween('created_at', [$comparing_start_date, $comparing_end_date]);
-
                         $total_orders = $orders
                             ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total, sum(total_price) as total_sum'))
                             ->groupBy('date')
                             ->get();
 
+                        dd($total_orders);
                         $total_sales = $total_orders->sum('total_price');
                         $agent_orders = $agent_orders->whereBetween('created_at', [$comparing_start_date, $comparing_end_date]);
                         $agentorders_sale = $agent_orders->sum('total_price');
