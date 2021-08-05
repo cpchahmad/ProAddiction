@@ -119,6 +119,7 @@ class AdminController extends Controller
                         $graph_one_order_dates = $total_orders->pluck('date')->toArray();
                         $graph_one_order_values = $total_orders->pluck('total')->toArray();
                         $graph_two_order_values = $total_orders->pluck('total_sum')->toArray();
+                        dd($graph_one_order_values,$graph_two_order_values,1);
                     }
 
                     return view('dashboard')->with([
@@ -146,6 +147,7 @@ class AdminController extends Controller
             $graph_one_order_dates = $ordersQ->pluck('date')->toArray();
             $graph_one_order_values = $ordersQ->pluck('total')->toArray();
             $graph_two_order_values = $ordersQ->pluck('total_sum')->toArray();
+            dd($graph_one_order_values,$graph_two_order_values,2);
             return view('dashboard')->with([
                 'total_orders' => $total_orders,
                 'total_sales' => $total_sales,
