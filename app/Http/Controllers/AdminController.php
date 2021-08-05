@@ -67,8 +67,10 @@ class AdminController extends Controller
                     if ($request->input('sell_area') != 'Select Area') {
                         if ($request->input('date-range') != 'Select Date Range') {
                             $orders = $orders->Where('agent_sellarea', $request->sell_area);
+                            dd($orders,1);
                         }else{
                             $orders = $total_orders->Where('agent_sellarea', $request->sell_area);
+                            dd($orders,2);
                         }
 
                         $products = Order_line_Item::whereIn('order_id', $orders->get()->pluck('id')->toArray());
