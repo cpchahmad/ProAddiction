@@ -37,7 +37,7 @@
                     <i class="fa fa-calendar"></i>&nbsp;
                     <span>{{$date_range}}</span> <i class="fa fa-caret-down"></i>
                 </div>
-                <button class="btn btn-primary filter_by_date" data-url="{{route('agenthome')}}"> Filter </button>
+                <button class="btn btn-primary filter_by_date" data-url="{{route('agenthome')}}"> Filter dfs</button>
                 <button class="btn btn-secondary clear_filter_data"> Clear </button>
             </div>
         </div>
