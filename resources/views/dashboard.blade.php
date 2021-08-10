@@ -56,7 +56,7 @@
                 <span>{{$date_range}}</span> <i class="fa fa-caret-down"></i>
             </div>
             <button class="btn btn-primary filter_by_date" data-url="{{route('home')}}" style="margin-left: 10px"> Filter </button>
-            <button class="btn btn-secondary clear_filter_data"> Clear </button>
+            <button class="btn btn-secondary clear_filter_data">Clear</button>
 
         </div>
     </div>

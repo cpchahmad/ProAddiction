@@ -7,6 +7,7 @@ use App\Commission;
 use App\Customer;
 use App\Order;
 use App\Order_line_Item;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use App\User;
@@ -15,10 +16,30 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    public function showAll()
+    public function showAll(Request $request)
     {
-        $orders = Order::latest()->paginate(10);
-        return view('orders', compact('orders'));
+//        dd($request->all());
+        $ordersQ = Order::query();
+        $agents = Customer::get();
+
+        if ($request->has('date-range') && $request->input('date-range') != 'Select Date Range') {
+
+
+            $date_range = explode('-', $request->input('date-range'));
+            $start_date = $date_range[0];
+            $end_date = $date_range[1];
+            $comparing_start_date = Carbon::parse($start_date)->format('Y-m-d') . ' 00:00:00';
+            $comparing_end_date = Carbon::parse($end_date)->format('Y-m-d') . ' 23:59:59';
+
+            $ordersQ->whereBetween('created_at', [$comparing_start_date, $comparing_end_date]);
+
+        }
+        if ($request->has('agent_name') && $request->input('agent_name') != 'Select Agent Name') {
+            $ordersQ->where('coupon_code',$request->agent_name);
+        }
+
+        $orders = $ordersQ->paginate(10);
+        return view('orders', compact('orders','agents'));
     }
 
     public function syncOrders($next = null)

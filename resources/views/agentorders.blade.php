@@ -124,7 +124,7 @@
                             </td>
 
                             <td>
-                                <div class="text-end">
+                                <div class="card-body">
                                     <a href="{{route('agent-order-view',($order->id))}}" class="btn btn-sm btn-primary" type="button"> view</a>
                                 </div>
                             </td>

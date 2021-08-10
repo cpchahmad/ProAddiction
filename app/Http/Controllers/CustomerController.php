@@ -93,7 +93,6 @@ class CustomerController extends Controller
     public function addAgent(Request $request)
     {
 
-
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -193,6 +192,13 @@ class CustomerController extends Controller
             'customer', $customer
         );
 
+    }
+    public function customer_delete($id){
+        $customer = Customer::findorfail($id);
+        if ($customer){
+            $customer->delete();
+        }
+        return back()->with('success','Customer Deleted Successfully');
     }
 
     public function createDiscount($request, $shop, $customers)

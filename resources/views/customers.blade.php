@@ -214,6 +214,8 @@
                         <td>
                             <div class="text-end">
                                 <a href="{{route('customer-view',($customer->id))}}" class="btn btn-sm btn-primary" type="button"> view</a>
+                                <a href="{{route('customer-delete',($customer->id))}}" class="btn btn-sm btn-danger" type="button"> Delete</a>
+
                             </div>
                         </td>
                     </tr>
