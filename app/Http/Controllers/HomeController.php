@@ -47,6 +47,7 @@ class HomeController extends Controller
             $store_total_orders = Order::get()->count();
             $store_total_sales = Order::get()->sum('total_price');
             $agent_sellareas = Agent_City::where('agent_code', $agent_coupen)->get();
+
             $ordersQ = Order::query()
                 ->where('coupon_code', $agent_coupen)
                 ->where('refund', 0)
