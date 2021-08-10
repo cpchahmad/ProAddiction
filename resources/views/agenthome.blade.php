@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <div class="col-4 ms-auto d-inline-flex">
+            <div class="col-4">
 
                 <div class="prepend">
                    <select name="sell_area" id="agent_sellarea" style="background: #fff; margin-left: 25px; cursor: pointer; padding: 12px 10px; border: 1px solid #ccc; width: 100%">
@@ -37,7 +37,7 @@
                     <i class="fa fa-calendar"></i>&nbsp;
                     <span>{{$date_range}}</span> <i class="fa fa-caret-down"></i>
                 </div>
-                <button class="btn btn-primary filter_by_date" data-url="{{route('agenthome')}}"> Filter dfs</button>
+                <button class="btn btn-primary filter_by_date" data-url="{{route('agenthome')}}"> Filter</button>
                 <button class="btn btn-secondary clear_filter_data"> Clear </button>
             </div>
         </div>
