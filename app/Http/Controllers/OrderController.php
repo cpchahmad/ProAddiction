@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Agent_City;
 use App\Commission;
 use App\Customer;
+use App\ErrorLog;
 use App\Order;
 use App\Order_line_Item;
 use Carbon\Carbon;
@@ -65,6 +66,9 @@ class OrderController extends Controller
 
     public function createShopifyOrders($order, $shop)
     {
+        $log = new ErrorLog();
+        $log->message = "In function";
+        $log->save();
         $o = Order::where('order_id', $order->id)->first();
         if ($o === null)
             $o = new Order();

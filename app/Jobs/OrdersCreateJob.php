@@ -58,9 +58,7 @@ class OrdersCreateJob implements ShouldQueue
 //        $orderController->createShopifyOrder($order, $shop);
 
         try{
-            $log = new ErrorLog();
-            $log->message = "Order create Job 1 ";
-            $log->save();
+
             $this->shopDomain = ShopDomain::fromNative($this->shopDomain);
 
             $shop = User::where('name', $this->shopDomain->toNative())->first();
