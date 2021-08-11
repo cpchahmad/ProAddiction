@@ -9,7 +9,7 @@ return [
     | (Not yet complete) A verbose logged output of processes
     |
     */
-    'debug' => (bool) env('SHOPIFY_DEBUG', false),
+    'debug' => (bool)env('SHOPIFY_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -21,7 +21,7 @@ return [
     | to your app's folder so you're free to modify before migrating.
     |
     */
-    'manual_migrations' => (bool) env('SHOPIFY_MANUAL_MIGRATIONS', false),
+    'manual_migrations' => (bool)env('SHOPIFY_MANUAL_MIGRATIONS', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -51,15 +51,15 @@ return [
     |
     */
     'route_names' => [
-        'home'                 => env('SHOPIFY_ROUTE_NAME_HOME', 'home'),
-        'authenticate'         => env('SHOPIFY_ROUTE_NAME_AUTHENTICATE', 'authenticate'),
-        'authenticate.oauth'   => env('SHOPIFY_ROUTE_NAME_AUTHENTICATE_OAUTH', 'authenticate.oauth'),
-        'billing'              => env('SHOPIFY_ROUTE_NAME_BILLING', 'billing'),
-        'billing.process'      => env('SHOPIFY_ROUTE_NAME_BILLING_PROCESS', 'billing.process'),
+        'home' => env('SHOPIFY_ROUTE_NAME_HOME', 'home'),
+        'authenticate' => env('SHOPIFY_ROUTE_NAME_AUTHENTICATE', 'authenticate'),
+        'authenticate.oauth' => env('SHOPIFY_ROUTE_NAME_AUTHENTICATE_OAUTH', 'authenticate.oauth'),
+        'billing' => env('SHOPIFY_ROUTE_NAME_BILLING', 'billing'),
+        'billing.process' => env('SHOPIFY_ROUTE_NAME_BILLING_PROCESS', 'billing.process'),
         'billing.usage_charge' => env('SHOPIFY_ROUTE_NAME_BILLING_USAGE_CHARGE', 'billing.usage_charge'),
-        'webhook'              => env('SHOPIFY_ROUTE_NAME_WEBHOOK', 'webhook'),
-        'itp'                  => env('SHOPIFY_ROUTE_NAME_ITP', 'itp'),
-        'itp.ask'              => env('SHOPIFY_ROUTE_NAME_ITP_ASK', 'itp.ask'),
+        'webhook' => env('SHOPIFY_ROUTE_NAME_WEBHOOK', 'webhook'),
+        'itp' => env('SHOPIFY_ROUTE_NAME_ITP', 'itp'),
+        'itp.ask' => env('SHOPIFY_ROUTE_NAME_ITP_ASK', 'itp.ask'),
     ],
 
     /*
@@ -109,7 +109,7 @@ return [
     |
     */
 
-    'appbridge_enabled' => (bool) env('SHOPIFY_APPBRIDGE_ENABLED', true),
+    'appbridge_enabled' => (bool)env('SHOPIFY_APPBRIDGE_ENABLED', true),
 
     // Use semver range to link to a major or minor version number.
     // Leaving empty will use the latest verison - not recommended in production.
@@ -267,7 +267,7 @@ return [
     |
     */
 
-    'billing_enabled' => (bool) env('SHOPIFY_BILLING_ENABLED', false),
+    'billing_enabled' => (bool)env('SHOPIFY_BILLING_ENABLED', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -279,7 +279,7 @@ return [
     |
     */
 
-    'billing_freemium_enabled' => (bool) env('SHOPIFY_BILLING_FREEMIUM_ENABLED', false),
+    'billing_freemium_enabled' => (bool)env('SHOPIFY_BILLING_FREEMIUM_ENABLED', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -305,13 +305,14 @@ return [
     */
 
     'webhooks' => [
-        /*
-            [
-                'topic' => env('SHOPIFY_WEBHOOK_1_TOPIC', 'orders/create'),
-                'address' => env('SHOPIFY_WEBHOOK_1_ADDRESS', 'https://some-app.com/webhook/orders-create')
-            ],
-            ...
-        */
+
+
+        [
+            'topic' => 'orders/create',
+            'address' => 'https://phpstack-206584-2033717.cloudwaysapps.com/webhook/orders-create'
+        ]
+
+
     ],
 
     /*
@@ -347,10 +348,10 @@ return [
 
     'after_authenticate_job' => [
 
-            [
-                'job' => \App\Jobs\AfterAuthenticateJob::class,
-                'inline' => true
-            ],
+        [
+            'job' => \App\Jobs\AfterAuthenticateJob::class,
+            'inline' => true
+        ],
 
     ],
 
@@ -365,8 +366,8 @@ return [
     */
 
     'job_queues' => [
-        'webhooks'           => env('WEBHOOKS_JOB_QUEUE', null),
-        'scripttags'         => env('SCRIPTTAGS_JOB_QUEUE', null),
+        'webhooks' => env('WEBHOOKS_JOB_QUEUE', null),
+        'scripttags' => env('SCRIPTTAGS_JOB_QUEUE', null),
         'after_authenticate' => env('AFTER_AUTHENTICATE_JOB_QUEUE', null),
     ],
 
