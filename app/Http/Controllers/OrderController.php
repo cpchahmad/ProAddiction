@@ -47,9 +47,6 @@ class OrderController extends Controller
     {
         $shop = Auth::user();
 
-        $webhooks = $shop->api()->rest('GET', '/admin/webhooks.json');
-
-        dd($webhooks);
         $orders = $shop->api()->rest('GET', '/admin/orders.json', [
             'limit' => 250,
             'page_info' => $next,
