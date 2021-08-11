@@ -1,6 +1,7 @@
 <?php namespace App\Jobs;
 
 use App\ErrorLog;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
