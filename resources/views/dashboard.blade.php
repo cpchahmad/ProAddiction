@@ -21,10 +21,11 @@
 
     <div class="row">
         <div class="col-md-3">
+{{--            @dd($sold_products[0]->shopify_product_id == $auto_selection_product)--}}
             <select name="products" id="products" style="background: #fff; margin-left: 25px; cursor: pointer; padding: 12px 10px; border: 1px solid #ccc; width: 100%">
-                                     <option selected disabled>Select Product</option>
+                <option selected disabled>Select Product</option>
                                         @foreach($sold_products as $sold_product)
-                                            <option value="{{$sold_product->shopify_product_id}}">{{$sold_product->title}}</option>
+                                            <option value="{{$sold_product->shopify_product_id}}" @php if( $sold_product->shopify_product_id == $auto_selection_product){ echo "selected";} @endphp>{{$sold_product->title}}</option>
                                         @endforeach
             </select>
 
@@ -34,7 +35,7 @@
             <select name="agent_names" id="agent_names" style="background: #fff; margin-left: 25px; cursor: pointer; padding: 12px 10px; border: 1px solid #ccc; width: 100%">
                 <option selected disabled>Select Agent Name</option>
             @foreach($agent_names as $agent_name)
-                    <option value="{{$agent_name->email}}">{{$agent_name->first_name}} {{$agent_name->last_name}}   {!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!}  {!! $agent_name->seller_code !!} </option>
+                    <option value="{{$agent_name->email}}" @php if( $agent_name->email == $auto_selection_agentname){ echo "selected";} @endphp>{{$agent_name->first_name}} {{$agent_name->last_name}}   {!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!}  {!! $agent_name->seller_code !!} </option>
                 @endforeach
             </select>
 
@@ -44,7 +45,7 @@
             <select id="sell_area" name="sell_area" style="background: #fff; margin-left: 25px; cursor: pointer; padding: 12px 10px; border: 1px solid #ccc; width: 100%">
                 <option selected disabled>Select Area</option>
             @foreach($sell_areas as $sell_area)
-                    <option value="{{$sell_area->city}}">{{$sell_area->city}}</option>
+                    <option value="{{$sell_area->city}}"  @php if( $sell_area->city == $auto_selection_sellarea){ echo "selected";} @endphp>{{$sell_area->city}}</option>
                 @endforeach
             </select>
         </div>

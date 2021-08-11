@@ -22,8 +22,9 @@
 
                 <div class="prepend">
                    <select name="sell_area" id="agent_sellarea" style="background: #fff; margin-left: 25px; cursor: pointer; padding: 12px 10px; border: 1px solid #ccc; width: 100%">
+                       <option selected disabled>Select Sell Area</option>
                     @foreach($agent_sellareas as $agent_sellarea)
-                       <option value="{{$agent_sellarea->city}}">{{$agent_sellarea->city}}</option>
+                       <option value="{{$agent_sellarea->city}}" @php if( $agent_sellarea->city == $auto_selection_sellarea){ echo "selected";} @endphp>{{$agent_sellarea->city}}</option>
                        @endforeach
                    </select>
 

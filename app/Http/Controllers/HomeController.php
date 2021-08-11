@@ -72,16 +72,17 @@ class HomeController extends Controller
                         $total_sales = $agent_orders->sum('total_price');
                         $total_commission = ($agent->commission / 100) * $total_sales;
                     }
-                    $orders = $agent_orders->Where('agent_sellarea', $request->sell_area);
-                    $agent_orders = $orders
-                        ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total, sum(total_price) as total_sum'))
-                        ->groupBy('date')
-                        ->get();
-                    $refund_orders = $agent_refunds_orders->Where('agent_sellarea', $request->sell_area);
-                    $total_sales = $agent_orders->sum('total_sum');
+                    if ($request->input('sell_area') != 'Select Sell Area') {
+                        $orders = $agent_orders->Where('agent_sellarea', $request->sell_area);
+                        $agent_orders = $orders
+                            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total, sum(total_price) as total_sum'))
+                            ->groupBy('date')
+                            ->get();
+                        $refund_orders = $agent_refunds_orders->Where('agent_sellarea', $request->sell_area);
+                        $total_sales = $agent_orders->sum('total_sum');
 
-                    $total_commission = ($agent->commission / 100) * $total_sales;
-
+                        $total_commission = ($agent->commission / 100) * $total_sales;
+                    }
 
                     $graph_one_order_dates = $agent_orders->pluck('date')->toArray();
                     $graph_one_order_values = $agent_orders->pluck('total')->toArray();
@@ -100,7 +101,9 @@ class HomeController extends Controller
                         'agent_sellareas' => $agent_sellareas,
                         'agent_total_products' => $agent_total_products,
                         'refund_orders' => $refund_orders,
-                        'date_range' => $request->input('date-range')
+                        'date_range' => $request->input('date-range'),
+                        'auto_selection_sellarea' => $request->input('sell_area'),
+
                     ]);
 
             }
@@ -123,7 +126,8 @@ class HomeController extends Controller
                 'agent_sellareas' => $agent_sellareas,
                 'agent_total_products' => $agent_total_products,
                 'refund_orders' => $agent_refunds_orders,
-                'date_range' => $request->input('date-range')
+                'date_range' => $request->input('date-range'),
+                'auto_selection_sellarea' => $request->input('sell_area'),
             ]);
         } else {
             return view('home');

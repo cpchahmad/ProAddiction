@@ -30,7 +30,7 @@
             <select id="agent_name" name="agent_name" style="background: #fff; margin-left: 25px; cursor: pointer; padding: 12px 10px; border: 1px solid #ccc; width: 100%">
                 <option selected disabled>Select Agent Name</option>
                                 @foreach($agents as $agent)
-                                    <option value="{{$agent->coupon_code}}">{{$agent->first_name}} {{$agent->last_name}} {!! "&nbsp;" !!} {!! "&nbsp;" !!}{!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!}  {{$agent->seller_code}}</option>
+                                    <option value="{{$agent->coupon_code}}" @php if( $agent->coupon_code == $auto_selection_name){ echo "selected";} @endphp>{{$agent->first_name}} {{$agent->last_name}} {!! "&nbsp;" !!} {!! "&nbsp;" !!}{!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!}  {{$agent->seller_code}}</option>
                                 @endforeach
             </select>
         </div>
@@ -222,8 +222,7 @@
 
                                 @if($order->status == 1 && $order->refund == 0)
                                     <div class="card-body">
-                                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                data-target="#confirm_refund{{$order->id}}">Refund
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirm_refund{{$order->id}}">Refund
                                         </button>
                                         <div class="modal fade" id="confirm_refund{{$order->id}}" tabindex="-1"
                                              role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -39,7 +39,8 @@ class OrderController extends Controller
         }
 
         $orders = $ordersQ->paginate(10);
-        return view('orders', compact('orders','agents'));
+        $auto_selection_name = $request->input('agent_name');
+        return view('orders', compact('orders','agents','auto_selection_name'));
     }
 
     public function syncOrders($next = null)

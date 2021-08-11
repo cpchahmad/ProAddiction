@@ -162,7 +162,11 @@ class AdminController extends Controller
                         'graph_one_labels' => $graph_one_order_dates,
                         'graph_one_values' => $graph_one_order_values,
                         'graph_two_values' => $graph_two_order_values,
-                        'date_range' => $request->input('date-range')
+                        'date_range' => $request->input('date-range'),
+                        'auto_selection_sellarea'=>$request->input('sell_area'),
+                        'auto_selection_agentname'=>$request->input('agent_names'),
+                        'auto_selection_product'=>$request->input('products'),
+
                     ]);
                 }
 
@@ -188,7 +192,10 @@ class AdminController extends Controller
                 'graph_one_labels' => $graph_one_order_dates,
                 'graph_one_values' => $graph_one_order_values,
                 'graph_two_values' => $graph_two_order_values,
-                'date_range' => $request->input('date-range')
+                'date_range' => $request->input('date-range'),
+                'auto_selection_sellarea'=>$request->input('sell_area'),
+                'auto_selection_agentname'=>$request->input('agent_names'),
+                'auto_selection_product'=>$request->input('products'),
             ]);
 
     }
