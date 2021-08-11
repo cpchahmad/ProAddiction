@@ -121,7 +121,7 @@
                             <div class="col-sm-3 col-6 mb-2">
                                 <div class="text-center">
                                     <div class="fs-smaller">
-                                        <span class="oi oi-caret-top fs-smallest mr-1 text-primary"></span>{{number_format(($agent_orders->count() / $store_total_orders) * 100,2)}}%</div>
+                                        <span class="oi oi-caret-top fs-smallest mr-1 text-primary"></span>@if($agent_orders->count() != 0){{number_format(($agent_orders->count() / $store_total_orders) * 100,2)}}% @endif</div>
                                     <div class="fw-bold">{{number_format($agent_orders->count(),2)}}</div>
                                     <div>Total Orders</div>
                                 </div>
@@ -129,7 +129,7 @@
                             <div class="col-sm-3 col-6 mb-2">
                                 <div class="text-center">
                                     <div class="fs-smaller">
-                                        <span class="oi oi-caret-top fs-smallest mr-1 text-success"></span>{{number_format(($total_sales / $store_total_sales) * 100 ,2)}}%</div>
+                                        <span class="oi oi-caret-top fs-smallest mr-1 text-success"></span>@if($store_total_sales != 0){{number_format(($total_sales / $store_total_sales) * 100 ,2)}}% @endif</div>
                                     <div class="fw-bold">{{number_format($total_sales,2)}}</div>
                                     <div>Total Sales</div>
                                 </div>
@@ -137,7 +137,7 @@
                             <div class="col-sm-3 col-6 mb-2">
                                 <div class="text-center">
                                     <div class="fs-smaller">
-                                        <span class="oi oi-caret-top  fs-smallest mr-1 text-warning"></span>{{number_format(($total_commission / $store_total_sales) * 100 ,2)}}%</div>
+                                        <span class="oi oi-caret-top  fs-smallest mr-1 text-warning"></span>@if($store_total_sales != 0) {{number_format(($total_commission / $store_total_sales) * 100 ,2)}}% @endif</div>
                                     <div class="fw-bold">{{number_format($total_commission,2)}}</div>
                                     <div>Total Commission</div>
                                 </div>
@@ -155,19 +155,19 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-4">
-                                <h6>Orders <small>{{number_format(($agent_orders->count() / $store_total_orders) * 100,2)}}%</small></h6>
+                                <h6>Orders <small>@if($store_total_orders != 0){{number_format(($agent_orders->count() / $store_total_orders) * 100,2)}}% @endif</small></h6>
                                 <div class="progress">
-                                    <div style="width: {{($agent_orders->count() / $store_total_orders) * 100}}%" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div style="width: @if($store_total_orders != 0) {{($agent_orders->count() / $store_total_orders) * 100}}% @endif" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <br>
-                                <h6>Sales <small>{{number_format(($total_sales / $store_total_sales) * 100 ,2)}}%</small></h6>
+                                <h6>Sales <small>@if($store_total_sales != 0){{number_format(($total_sales / $store_total_sales) * 100 ,2)}}% @endif</small></h6>
                                 <div class="progress">
-                                    <div style="width: {{($total_sales / $store_total_sales) * 100 }}%" class="progress-bar bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div style="width: @if($store_total_sales != 0) {{($total_sales / $store_total_sales) * 100 }}% @endif" class="progress-bar bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <br>
-                                <h6>Commission <small>{{number_format(($total_commission / $store_total_sales) * 100 ,2)}}%</small></h6>
+                                <h6>Commission <small>@if($store_total_sales != 0){{number_format(($total_commission / $store_total_sales) * 100 ,2)}}% @endif</small></h6>
                                 <div class="progress">
-                                    <div style="width: {{($total_commission / $store_total_sales) * 100 }}%" class="progress-bar bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div style="width: @if($store_total_sales != 0){{($total_commission / $store_total_sales) * 100 }}% @endif" class="progress-bar bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <br>
 {{--                                <h6>Wishlist <small>(38%)</small></h6>--}}

@@ -267,7 +267,6 @@
                 window.myBar = new Chart(ctx, config);
             }
             if($('body').find('#sales').length > 0){
-                console.log('ok');
                 var config = {
                     type: 'line',
                     data: {
