@@ -49,12 +49,28 @@ class OrdersCreateJob implements ShouldQueue
     public function handle()
     {
         // Convert domain
-        $this->shopDomain = ShopDomain::fromNative($this->shopDomain);
+//        $this->shopDomain = ShopDomain::fromNative($this->shopDomain);
+//
+//        $shop = User::where('name', $this->shopDomain->toNative())->first();
+//        $order = json_decode(json_encode($this->data), false);
+//        $orderController = new OrderController;
+//        $orderController->createShopifyOrder($order, $shop);
 
-        $shop = User::where('name', $this->shopDomain->toNative())->first();
-        $order = json_decode(json_encode($this->data), false);
-        $orderController = new OrderController;
-        $orderController->createShopifyOrder($order, $shop);
+        try{
+            $this->shopDomain = ShopDomain::fromNative($this->shopDomain);
+
+            $shop = User::where('name', $this->shopDomain->toNative())->first();
+            $order = json_decode(json_encode($this->data), false);
+            $orderController = new OrderController;
+            $orderController->createShopifyOrder($order, $shop);
+
+
+        }
+        catch(\Exception $e) {
+            $log = new ErrorLog();
+            $log->message = "Order create Job ". $e->getMessage();
+            $log->save();
+        }
 
         // Do what you wish with the data
         // Access domain name as $this->shopDomain->toNative()
