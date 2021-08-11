@@ -77,7 +77,7 @@ class OrdersCreateJob implements ShouldQueue
             $log->message = "after order";
             $log->save();
             $orderController = new OrderController;
-            $orderController->createShopifyOrder($order, $shop);
+            $orderController->createShopifyOrders($order, $shop);
             $log = new ErrorLog();
             $log->message = "after orderController";
             $log->save();
