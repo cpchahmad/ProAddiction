@@ -66,9 +66,7 @@ class OrderController extends Controller
 
     public function createShopifyOrders($order, $shop)
     {
-        $log = new ErrorLog();
-        $log->message = "In function";
-        $log->save();
+
         $o = Order::where('order_id', $order->id)->first();
         if ($o === null)
             $o = new Order();
