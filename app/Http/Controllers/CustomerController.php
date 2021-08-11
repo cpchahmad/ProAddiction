@@ -93,12 +93,6 @@ class CustomerController extends Controller
     public function addAgent(Request $request)
     {
 
-        $shop = Auth::user();
-
-        $webhooks = $shop->api()->rest('GET', '/admin/webhooks.json');
-
-        dd($webhooks);
-
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
