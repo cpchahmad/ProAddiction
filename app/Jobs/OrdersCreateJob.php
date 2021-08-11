@@ -3,6 +3,7 @@
 use App\ErrorLog;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -62,9 +63,18 @@ class OrdersCreateJob implements ShouldQueue
             $this->shopDomain = ShopDomain::fromNative($this->shopDomain);
 
             $shop = User::where('name', $this->shopDomain->toNative())->first();
+            $log = new ErrorLog();
+            $log->message = "after shop";
+            $log->save();
             $order = json_decode(json_encode($this->data), false);
+            $log = new ErrorLog();
+            $log->message = "after order";
+            $log->save();
             $orderController = new OrderController;
             $orderController->createShopifyOrder($order, $shop);
+            $log = new ErrorLog();
+            $log->message = "after orderController";
+            $log->save();
 
 
 
