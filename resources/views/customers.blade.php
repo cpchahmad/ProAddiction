@@ -232,7 +232,7 @@
             </div>
         </div>
         @else
-        <p class="text-center">No Customer Available.</p>
+        <p class="text-center">No Agents Available.</p>
     @endif
     </div>
 @endsection

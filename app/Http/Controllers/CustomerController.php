@@ -149,8 +149,10 @@ class CustomerController extends Controller
             ]
         ]);
 
+        $customers = json_decode(json_encode($customers['body']['container']['customer']));
+
         if (isset($request->discount)) {
-            list($couponCode, $price_rule_id) = $this->createDiscount($request, $shop,$customers);
+            list($couponCode, $price_rule_id,$discount_id) = $this->createDiscount($request, $shop,$customers);
         }
         else
             $couponCode = 'none';
@@ -158,6 +160,7 @@ class CustomerController extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
+            'shopify_id' => $customers->id,
             'seller_code' => $request->seller_code,
             'seller_area' => $request->city.' '.$request->state.' '.$request->country,
             'phone_no' => $request->phone_no,
@@ -168,6 +171,7 @@ class CustomerController extends Controller
             'seller_color' => $request->seller_color,
             'commission' => $request->commission_rate,
             'price_rule_id' => $price_rule_id,
+            'discount_id' => $discount_id,
         ]);
 
         $customers = json_decode(json_encode($customers));
@@ -193,13 +197,6 @@ class CustomerController extends Controller
         );
 
     }
-    public function customer_delete($id){
-        $customer = Customer::findorfail($id);
-        if ($customer){
-            $customer->delete();
-        }
-        return back()->with('success','Customer Deleted Successfully');
-    }
 
     public function createDiscount($request, $shop, $customers)
     {
@@ -209,7 +206,7 @@ class CustomerController extends Controller
                 'title' => "$request->discount" . "OFFONEACHITEM" . Carbon::now(),
                 'customer_selection' => 'prerequisite',
                 "prerequisite_customer_ids" => [
-                    $customers->body->customer->id
+                    $customers->id
                 ],
                 'value' => '-' . $request->discount,
                 'value_type' => 'percentage',
@@ -220,6 +217,7 @@ class CustomerController extends Controller
             ]
         ]);
         $priceRule = json_decode(json_encode($priceRule));
+
         $discountCode = $shop->api()->rest('post', '/admin/price_rules/' . $priceRule->body->price_rule->id . '/discount_codes.json', [
             'discount_code' => [
                 'code' => $priceRule->body->price_rule->title,
@@ -227,9 +225,21 @@ class CustomerController extends Controller
         ]);
         $discountCode = json_decode(json_encode($discountCode));
         if (!$discountCode->errors) {
-            return [$discountCode->body->discount_code->code, $discountCode->body->discount_code->price_rule_id];
+            return [$discountCode->body->discount_code->code, $discountCode->body->discount_code->price_rule_id,$discountCode->body->discount_code->id];
         }
         return 'none';
+    }
+
+    public function customer_delete($id){
+        $customer = Customer::findorfail($id);
+        if ($customer){
+            $customer->delete();
+        }
+
+        $shop = Auth::user();
+        $customer_delete = $shop->api()->rest('delete',  '/admin/customers/'.$customer->shopify_id.'.json');
+        $discount_delete = $shop->api()->rest('delete', '/admin/price_rules/' . $customer->price_rule_id . '/discount_codes/' . $customer->discount_id . '.json');
+        return back()->with('success','Customer Deleted Successfully');
     }
 
     public function check_customer_email(Request $request)

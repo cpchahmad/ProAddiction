@@ -27,7 +27,7 @@ Route::group(['middleware' => ['auth.shopify']], function () {
         return view('customers', compact('customers', 'countries'));
     })->name('customers');
     Route::get('/customer-view/{id}', 'CustomerController@customer_detail')->name('customer-view');
-    Route::get('/customer-delete/{id}', 'CustomerController@customer_delete')->name('customer-delete');
+    Route::get('/customer-delete{id}', 'CustomerController@customer_delete')->name('customer-delete');
 
     Route::get('/sync-customer', 'CustomerController@ShopifyCustomers')->name('sync-customer');
     Route::post('/add-agent', 'CustomerController@addAgent')->name('add_agent');
