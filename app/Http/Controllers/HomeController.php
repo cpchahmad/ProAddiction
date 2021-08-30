@@ -34,7 +34,6 @@ class HomeController extends Controller
 //        dd($request->all());
         if (isset(Auth::user()->customer_id)) {
             $agent = Customer::find(Auth::user()->customer_id);
-            dd( $shop = Auth::user());
 
             $agent_coupen = $agent->coupon_code;
 
