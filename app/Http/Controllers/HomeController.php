@@ -34,7 +34,8 @@ class HomeController extends Controller
 //        dd($request->all());
         if (isset(Auth::user()->customer_id)) {
             $agent = Customer::find(Auth::user()->customer_id);
-
+            dd($agent);
+            $shop = Auth::user();
             $agent_coupen = $agent->coupon_code;
 
             $agent_orders = Order::where('coupon_code', $agent_coupen)->where('refund', 0)->newQuery();
