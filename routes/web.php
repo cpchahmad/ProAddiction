@@ -33,6 +33,13 @@ Route::group(['middleware' => ['auth.shopify']], function () {
     Route::post('/add-agent', 'CustomerController@addAgent')->name('add_agent');
 
 
+    Route::get('/professionals', 'CustomerController@professionals')->name('professionals');
+    Route::get('/professionals_check', 'CustomerController@professionals_check')->name('professionals.check');
+    Route::get('/professional-view/{id}', 'CustomerController@professional_detail')->name('professional-view');
+    Route::get('/professional/{id}/approve', 'CustomerController@professional_approve')->name('professional.approve');
+    Route::get('/professional/{id}/disapprove', 'CustomerController@professional_disapprove')->name('professional.disapprove');
+
+
     Route::get('/orders', 'OrderController@showAll')->name('orders');
     Route::get('/sync-orders', 'OrderController@syncOrders')->name('sync_orders');
     Route::post('show-states', function (Request $request)
@@ -74,6 +81,10 @@ Route::get('/agent-dashboard', 'AgentController@agent_dashboard')->name('agent-d
 Auth::routes();
 Route::get('/agent-order-history', 'AgentController@index')->name('agent-order-history')->middleware('auth');
 Route::get('/agent-order-view/{id}', 'AgentController@order_detail')->name('agent-order-view')->middleware('auth');
+
+Route::get('/professional/form', 'CustomerController@professional_form')->name('professionals.form');
+Route::post('/professional/form', 'CustomerController@professional_form_submit')->name('professionals.form.submit');
+
 
 Route::get('/agenthome', 'HomeController@index')->name('agenthome');
 Route::post('/sell-area', 'HomeController@index')->name('sell-area');

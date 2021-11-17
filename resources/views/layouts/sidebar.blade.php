@@ -9,6 +9,14 @@
         active
     @endif"><a href="{{route('customers')}}"><span class="fa fa-users"></span>Agents</a></li>
     <li class="
+    @if (request()->is('professionals_check'))
+        active
+    @endif"><a href="{{route('professionals.check')}}"><span class="fa fa-users"></span>Approve Professional</a></li>
+    <li class="
+    @if (request()->is('professionals'))
+        active
+    @endif"><a href="{{route('professionals')}}"><span class="fa fa-users"></span>Professional</a></li>
+    <li class="
     @if (request()->is('orders'))
         active
     @endif" ><a href="{{route('orders')}}"><span class="fa fa-first-order"></span> Orders</a></li>

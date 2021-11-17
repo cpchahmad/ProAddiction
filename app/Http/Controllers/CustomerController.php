@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Professional;
 use App\User;
 use Carbon\Carbon;
 use http\Env\Response;
@@ -198,6 +199,7 @@ class CustomerController extends Controller
 
     }
 
+
     public function createDiscount($request, $shop, $customers)
     {
         $customers = json_decode(json_encode($customers));
@@ -258,6 +260,107 @@ class CustomerController extends Controller
                 'agent' => 'you are not an agent',
             ]);
         }
+    }
+
+    public function professional_form(){
+
+        return view('professional_form');
+    }
+    public function professional_form_submit(Request $request){
+
+
+        $request->validate([
+            'name'     =>  'required',
+            'email'           => 'required',
+            'phone'           => 'required',
+            'address'           => 'required',
+            'file'           => 'required'
+        ]);
+
+        if ($request->hasFile('file')) {
+            $date = Carbon::now();
+            $date = strtotime($date->toDateTimeString());
+            $file = $request->file('file');
+            $name = str_replace(' ', '', $file->getClientOriginalName());
+            $name = "file_".$date ."_" .$name;
+            $file->move(public_path() . '/professional_files/', $name);
+            $file_name = '/professional_files/' . $name;
+        }else{
+            $file_name="";
+        }
+        $p_data=new Professional();
+        $p_data->name=$request->input('name');
+        $p_data->email=$request->input('email');
+        $p_data->address=$request->input('address');
+        $p_data->phone_no=$request->input('phone');
+        $p_data->file_name=$file_name;
+        $p_data->save();
+        return back()->with('success','Form Submitted Successfully!');
+    }
+    public function professionals(){
+        $professionals=Customer::where('tag',"Professional")->paginate(50);
+        return view('professionals',compact('professionals'));
+    }
+    public function professionals_check(){
+        $professionals=Professional::where('status',0)->orderBy('created_at','desc')->paginate(50);
+        return view('professionals_check',compact('professionals'));
+    }
+    public function professional_detail($id)
+    {
+        $professional = Professional::findorfail($id);
+        return view('professionaldetail')->with(
+            'professional', $professional
+        );
+
+    }
+    public function professional_approve($id)
+    {
+        $professional = Professional::findorfail($id);
+        $professional->status=1;
+        $professional->save();
+        $shop = Auth::user();
+        $customer=Customer::where('email',$professional->email)->first();
+        if($customer==null){
+            $customers = $shop->api()->rest('post', '/admin/customers.json', [
+                'customer' => [
+                    'first_name' => $professional->name,
+                    'last_name' => $professional->name,
+                    'email' => $professional->email,
+                    'addresses' => [0 => [
+                        'zip' => '',
+                        'address1' => $professional->address,
+                    ]
+                    ],
+                    "tags" => "Professional",
+                ]
+            ]);
+
+            $customers = json_decode(json_encode($customers['body']['container']['customer']));
+
+            $c = Customer::create([
+                'first_name' => $professional->name,
+                'last_name' => $professional->name,
+                'email' => $professional->email,
+                'shopify_id' => $customers->id,
+                'seller_area' => $professional->address,
+                'phone_no' => $professional->phone_no,
+                'shop_id' => $shop->id,
+                'tag' => "Professional",
+            ]);
+        }else{
+            $customer->tag="Professional";
+            $customer->save();
+        }
+        return redirect(route('professionals.check'));
+    }
+    public function professional_disapprove($id)
+    {
+        $professional = Professional::findorfail($id);
+        $professional->status=2;
+        $professional->save();
+
+        return redirect(route('professionals.check'));
+
     }
 }
 
