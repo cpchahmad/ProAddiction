@@ -44,14 +44,14 @@
                         <th scope="col"><h6>Phone Number</h6> </th>
                         <th scope="col"><h6>Address</h6> </th>
                         <th scope="col"><h6>Tag</h6> </th>
-                        <th scope="col"><h6>Action</h6></th>
+{{--                        <th scope="col"><h6>Action</h6></th>--}}
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($professionals as $professional)
                     <tr>
     {{--                    <th scope="row">1</th>--}}
-                        <td><a href="{{route('professional-view',($professional->id))}}">{{$professional->first_name}}&nbsp;{{$professional->last_name}}</a></td>
+                        <td>{{$professional->first_name}}&nbsp;{{$professional->last_name}}</td>
 
                         <td>{{$professional->email}}</td>
                         <td>@if($professional->phone_no){{$professional->phone_no}} @else None @endif</td>
@@ -59,11 +59,11 @@
                         <td>{{$professional->tag}}</td>
 
 
-                        <td>
+                        {{--<td>
                             <div class="text-end">
                                 <a href="{{route('professional-view',($professional->id))}}" class="btn btn-sm btn-primary" type="button"> view</a>
                             </div>
-                        </td>
+                        </td>--}}
                     </tr>
                     @endforeach
 
