@@ -40,6 +40,15 @@
         body{
             background-color: white;
         }
+        .tab_btn{
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 7px;
+            background: #000;
+            border: 1px solid #000;
+            color: #fff;
+            font-size: 14px;
+        }
     </style>
     <script type="text/javascript">
         document.documentElement.className = document.documentElement.className.replace('no-js', 'js') + (document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1") ? ' svg' : ' no-svg');
@@ -85,7 +94,7 @@
                 </div>
                 <div class="form-group">
                     <label for="#">Salon address</label>
-                    <input placeholder="Enter Phone number" type="text" name="address" class="form-control" required>
+                    <input placeholder="Enter Salon address" type="text" name="address" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="#">Upload file - Stylist License</label>
@@ -95,7 +104,7 @@
 
                 <br>
                 <div class="form-group">
-                    <input type="submit" class="btn btn-primary" value="Submit">
+                    <input type="submit" class="btn tab_btn" value="Submit">
                 </div>
             </form>
         </div>
