@@ -295,7 +295,9 @@ class CustomerController extends Controller
         $p_data->phone_no=$request->input('phone');
         $p_data->file_name=$file_name;
         $p_data->save();
-        return back()->with('success','Form Submitted Successfully!');
+        return view('professional_form_submit');
+
+//        return back()->with('success','Form Submitted Successfully!');
     }
     public function professionals(){
         $professionals=Customer::where('tag',"Professional")->paginate(50);
