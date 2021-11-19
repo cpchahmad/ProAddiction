@@ -267,8 +267,6 @@ class CustomerController extends Controller
         return view('professional_form');
     }
     public function professional_form_submit(Request $request){
-
-
         $request->validate([
             'name'     =>  'required',
             'email'           => 'required',
@@ -276,7 +274,6 @@ class CustomerController extends Controller
             'address'           => 'required',
             'file'           => 'required'
         ]);
-
         if ($request->hasFile('file')) {
             $date = Carbon::now();
             $date = strtotime($date->toDateTimeString());
@@ -296,7 +293,6 @@ class CustomerController extends Controller
         $p_data->file_name=$file_name;
         $p_data->save();
         return view('professional_form_submit');
-
 //        return back()->with('success','Form Submitted Successfully!');
     }
     public function professionals(){
