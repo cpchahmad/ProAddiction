@@ -89,6 +89,10 @@
                     <input placeholder="Enter email address" type="email" name="email" class="form-control" required>
                 </div>
                 <div class="form-group">
+                    <label for="#">Password</label>
+                    <input placeholder="Enter password" type="password" name="password" class="form-control" required>
+                </div>
+                <div class="form-group">
                     <label for="#">Phone Number</label>
                     <input placeholder="Enter Phone number" type="text" name="phone" class="form-control" required>
                 </div>

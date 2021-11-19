@@ -18,6 +18,7 @@ class CreateProfessionalsTable extends Migration
             $table->bigInteger('shop_id')->nullable();
             $table->string('name')->nullable();
             $table->string('email')->nullable();
+            $table->string('password')->nullable();
             $table->string('phone_no')->nullable();
             $table->string('address')->nullable();
             $table->string('file_name')->nullable();

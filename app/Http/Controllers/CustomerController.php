@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Mail\SendEmail;
 use App\Professional;
 use App\User;
 use Carbon\Carbon;
@@ -10,6 +11,7 @@ use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class CustomerController extends Controller
 {
@@ -270,6 +272,7 @@ class CustomerController extends Controller
         $request->validate([
             'name'     =>  'required',
             'email'           => 'required',
+            'password'           => 'required',
             'phone'           => 'required',
             'address'           => 'required',
             'file'           => 'required'
@@ -288,11 +291,26 @@ class CustomerController extends Controller
         $p_data=new Professional();
         $p_data->name=$request->input('name');
         $p_data->email=$request->input('email');
+        $p_data->password=$request->input('password');
         $p_data->address=$request->input('address');
         $p_data->phone_no=$request->input('phone');
         $p_data->file_name=$file_name;
         $p_data->save();
-        return view('professional_form_submit');
+        try{
+
+            $data['subject'] = "New Professional";
+            $data['message'] = "You have new professional request. Please visit app.";
+            $send_to = "info@proaddiction.com";
+            $data['from_address'] = env('MAIL_FROM_ADDRESS');//Sender Email
+            Mail::to($send_to)->send(new SendEmail($data));
+
+
+            return view('professional_form_submit');
+
+        }catch (\Exception $exception){
+            return view('professional_form_submit');
+
+        }
 //        return back()->with('success','Form Submitted Successfully!');
     }
     public function professionals(){
@@ -329,6 +347,8 @@ class CustomerController extends Controller
                         'address1' => $professional->address,
                     ]
                     ],
+                    "password" => $professional->password,
+                    "password_confirmation" => $professional->password,
                     "tags" => "Professional",
                 ]
             ]);
