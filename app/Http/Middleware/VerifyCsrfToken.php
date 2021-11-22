@@ -14,6 +14,7 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         '/show-states',
         '/show-city',
-        '/check-customer-email'
+        '/check-customer-email',
+        '/professional/form'
     ];
 }
