@@ -12,6 +12,6 @@ class Order extends Model
     }
     protected function agent()
     {
-        return $this->hasOne('App\Customer', 'coupon_code', 'coupon_code');
+        return $this->hasOne('App\Customer', 'id', 'agent_id');
     }
 }

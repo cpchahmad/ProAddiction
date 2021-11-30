@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Customer;
 use App\Country;
 use App\State;
+use App\User;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,7 +23,7 @@ Route::group(['middleware' => ['auth.shopify']], function () {
     Route::get('/customers', function ()
     {
 
-        $customers = Customer::latest()->paginate(20);
+        $customers = Customer::where('is_agent',1)->latest()->paginate(20);
         $countries = Country::all();
         return view('customers', compact('customers', 'countries'));
     })->name('customers');
@@ -72,21 +73,29 @@ Route::group(['middleware' => ['auth.shopify']], function () {
     Route::get('/analytics', 'AnalyticsController@showAnalytics')->name('analytics');
 
 
+    //Agent
+    Route::get('/agenthome', 'HomeController@index')->name('agenthome');
+
+    Route::get('/agent-order-history', 'AgentController@index')->name('agent-order-history')->middleware('auth');
+    Route::get('/agent-order-view/{id}', 'AgentController@order_detail')->name('agent-order-view')->middleware('auth');
+
+    Route::get('/agent-stores', 'AgentController@agent_store')->name('agent-stores');
+    Route::post('/agent-add-store', 'AgentController@agent_add_store')->name('agent-add-store');
+    Route::get('/agent-delete-store/{id}', 'AgentController@agent_delete_store')->name('agent-delete-store');
+
+
+
 });
 
 Route::post('/check-customer-email', 'CustomerController@check_customer_email')->name('check-customer-email');
 Route::get('/agent-dashboard', 'AgentController@agent_dashboard')->name('agent-dashboard');
 
-
 Auth::routes();
-Route::get('/agent-order-history', 'AgentController@index')->name('agent-order-history')->middleware('auth');
-Route::get('/agent-order-view/{id}', 'AgentController@order_detail')->name('agent-order-view')->middleware('auth');
 
 Route::get('/professional/form', 'CustomerController@professional_form')->name('professionals.form');
 Route::post('/professional/form', 'CustomerController@professional_form_submit')->name('professionals.form.submit');
 
 
-Route::get('/agenthome', 'HomeController@index')->name('agenthome');
 Route::post('/sell-area', 'HomeController@index')->name('sell-area');
 
 

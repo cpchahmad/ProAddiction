@@ -8,7 +8,7 @@
         }
     </style>
 
-    @if( Session::has( 'success' ))
+    {{--@if( Session::has( 'success' ))
         {{ Session::get( 'success' ) }}
         <br>
     @elseif( Session::has( 'errors' ))
@@ -24,7 +24,7 @@
             </ul>
         </div>
         <br>
-    @endif
+    @endif--}}
     <div>
 
     <div class="modal fade" id="myModal" role="dialog">
@@ -123,7 +123,7 @@
                                 <div class="form-material">
                                     <label for="material-error">Discount in percentage</label>
                                     <input  class="form-control" type="text"  name="discount"
-                                            value=""   placeholder="Enter discount">
+                                            value="50"   placeholder="Enter discount">
                                 </div>
                             </div>
                         </div>

@@ -117,6 +117,7 @@ class CustomerController extends Controller
                 ],
                 "password" => $request->password,
                 "password_confirmation" => $request->password,
+                "tags" => "agent",
                 "metafields" =>
                     array(
                         0 =>
@@ -155,7 +156,7 @@ class CustomerController extends Controller
         $customers = json_decode(json_encode($customers['body']['container']['customer']));
 
         if (isset($request->discount)) {
-            list($couponCode, $price_rule_id,$discount_id) = $this->createDiscount($request, $shop,$customers);
+            list($couponCode, $price_rule_id,$discount_id) = $this->createDiscount($request->discount, $shop,$customers);
         }
         else
             $couponCode = 'none';
@@ -175,6 +176,8 @@ class CustomerController extends Controller
             'commission' => $request->commission_rate,
             'price_rule_id' => $price_rule_id,
             'discount_id' => $discount_id,
+            'tag' => "agent",
+
         ]);
 
         $customers = json_decode(json_encode($customers));
@@ -186,7 +189,27 @@ class CustomerController extends Controller
             'customer_id' => $c->id,
         ]);
         $user->assignRole('agent');
-        return redirect()->back()->with('success', 'Agent Added Successfully');
+        try{
+
+            $data['subject'] = "ProAddiction";
+            $data['message'] = "You just added as a new agent. Please visit Store.";
+            $send_to = $c->email;
+            $data['from_address'] = env('MAIL_FROM_ADDRESS');//Sender Email
+            Mail::to($send_to)->send(new SendEmail($data));
+
+            $data2['subject'] = "New Agent";
+            $data2['message'] = "You just added a new AGENT";
+            $send_to2 = "info@proaddiction.com";
+            $data2['from_address'] = env('MAIL_FROM_ADDRESS');//Sender Email
+            Mail::to($send_to2)->send(new SendEmail($data2));
+
+
+            return redirect()->back()->with('success', 'Agent Added Successfully');
+
+        }catch (\Exception $exception){
+            return redirect()->back()->with('success', 'Agent Added Successfully');
+
+        }
 
 
     }
@@ -202,17 +225,17 @@ class CustomerController extends Controller
     }
 
 
-    public function createDiscount($request, $shop, $customers)
+    public function createDiscount($discount, $shop, $customers)
     {
         $customers = json_decode(json_encode($customers));
         $priceRule = $shop->api()->rest('post', '/admin/price_rules.json', [
             'price_rule' => [
-                'title' => "$request->discount" . "OFFONEACHITEM" . Carbon::now(),
+                'title' => "$customers->first_name"."$customers->last_name"."$discount" . "%OFFONEACHITEM" . Carbon::now(),
                 'customer_selection' => 'prerequisite',
                 "prerequisite_customer_ids" => [
                     $customers->id
                 ],
-                'value' => '-' . $request->discount,
+                'value' => '-' . $discount,
                 'value_type' => 'percentage',
                 'target_type' => "line_item",
                 'target_selection' => "all",
@@ -299,7 +322,7 @@ class CustomerController extends Controller
         try{
 
             $data['subject'] = "New Professional";
-            $data['message'] = "You have new professional request. Please visit app.";
+            $data['message'] = "You have a new requests - PROFESSIONAL ONLY.";
             $send_to = "info@proaddiction.com";
             $data['from_address'] = env('MAIL_FROM_ADDRESS');//Sender Email
             Mail::to($send_to)->send(new SendEmail($data));
@@ -334,6 +357,7 @@ class CustomerController extends Controller
         $professional = Professional::findorfail($id);
         $professional->status=1;
         $professional->save();
+        $discount=50;
         $shop = Auth::user();
         $customer=Customer::where('email',$professional->email)->first();
         if($customer==null){
@@ -349,11 +373,29 @@ class CustomerController extends Controller
                     ],
                     "password" => $professional->password,
                     "password_confirmation" => $professional->password,
-                    "tags" => "Professional",
+                    "tags" => "professional",
+                    "metafields" =>
+                        array(
+                            0 =>
+                                array(
+                                    "key" => 'is_professional',
+                                    "value" => 1,
+                                    "value_type" => "boolean",
+                                    "namespace" => "customers",
+                                ),
+                            1 =>
+                                array(
+                                    "key" => 'discount',
+                                    "value" => $discount,
+                                    "value_type" => "float",
+                                    "namespace" => "customers",
+                                ),
+                        ),
                 ]
             ]);
 
             $customers = json_decode(json_encode($customers['body']['container']['customer']));
+            list($couponCode, $price_rule_id,$discount_id) = $this->createDiscount($discount, $shop,$customers);
 
             $c = Customer::create([
                 'first_name' => $professional->name,
@@ -363,13 +405,31 @@ class CustomerController extends Controller
                 'seller_area' => $professional->address,
                 'phone_no' => $professional->phone_no,
                 'shop_id' => $shop->id,
-                'tag' => "Professional",
+                'tag' => "professional",
+                'coupon_code' => $couponCode,
+                'discount' => $discount,
+                'price_rule_id' => $price_rule_id,
+                'discount_id' => $discount_id,
             ]);
         }else{
-            $customer->tag="Professional";
+            $customer->tag="professional";
             $customer->save();
         }
-        return redirect(route('professionals.check'));
+        try{
+
+            $data['subject'] = "ProAddiction";
+            $data['message'] = "You just got approved to PROFESSIONAL. Please visit Store.";
+            $send_to = $c->email;
+            $data['from_address'] = env('MAIL_FROM_ADDRESS');//Sender Email
+            Mail::to($send_to)->send(new SendEmail($data));
+
+
+            return redirect(route('professionals.check'));
+
+        }catch (\Exception $exception){
+            return redirect(route('professionals.check'));
+
+        }
     }
     public function professional_disapprove($id)
     {

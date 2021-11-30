@@ -36,11 +36,13 @@ class HomeController extends Controller
             $agent = Customer::find(Auth::user()->customer_id);
 
             $agent_coupen = $agent->coupon_code;
+            $agent_name = Auth::user();
+            $a_stores=$agent_name->has_stores->pluck('email')->toArray();
 
-            $agent_orders = Order::where('coupon_code', $agent_coupen)->where('refund', 0)->newQuery();
+            $agent_orders = Order::whereIN('email', $a_stores)->where('refund', 0)->newQuery();
             $agent_products = Order_line_Item::whereIn('order_id', $agent_orders->pluck('id')->toArray());
             $agent_total_products = $agent_products->sum('quantity');
-            $agent_refunds_orders = Order::where('coupon_code', $agent_coupen)->where('refund', 1)->newQuery();
+            $agent_refunds_orders = Order::whereIN('email', $a_stores)->where('refund', 1)->newQuery();
             $total_sales = $agent_orders->sum('total_price');
 
             $total_commission = ($agent->commission / 100) * $total_sales;
@@ -48,7 +50,7 @@ class HomeController extends Controller
             $store_total_sales = Order::get()->sum('total_price');
             $agent_sellareas = Agent_City::where('agent_code', $agent_coupen)->get();
             $ordersQ = Order::query()
-                ->where('coupon_code', $agent_coupen)
+                ->whereIN('email', $a_stores)
                 ->where('refund', 0)
                 ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total, sum(total_price) as total_sum'))
                 ->groupBy('date')

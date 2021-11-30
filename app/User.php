@@ -47,4 +47,8 @@ class User extends Authenticatable implements IShopModel
     {
         return $this->belongsTo('App\Customer', 'customer_id');
     }
+    public function has_stores(){
+        return $this->hasMany('App\AgentStore', 'agent_id','customer_id');
+
+    }
 }

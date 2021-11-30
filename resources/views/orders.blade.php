@@ -14,13 +14,13 @@
         }
     </style>
 
-    @if( Session::has( 'success' ))
+   {{-- @if( Session::has( 'success' ))
         {{ Session::get( 'success' ) }}
         <br>
     @elseif( Session::has( 'errors' ))
         {{ Session::get( 'errors' ) }}
         <br>
-    @endif
+    @endif--}}
     <div class="row mb-3">
         <div class="col-md-4">
             <h5>Orders</h5>
@@ -30,7 +30,7 @@
             <select id="agent_name" name="agent_name" style="background: #fff; margin-left: 25px; cursor: pointer; padding: 12px 10px; border: 1px solid #ccc; width: 100%">
                 <option selected disabled>Select Agent Name</option>
                                 @foreach($agents as $agent)
-                                    <option value="{{$agent->coupon_code}}" @php if( $agent->coupon_code == $auto_selection_name){ echo "selected";} @endphp>{{$agent->first_name}} {{$agent->last_name}} {!! "&nbsp;" !!} {!! "&nbsp;" !!}{!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!}  {{$agent->seller_code}}</option>
+                                    <option value="{{$agent->email}}" @php if( $agent->email == $auto_selection_name){ echo "selected";} @endphp>{{$agent->first_name}} {{$agent->last_name}} {!! "&nbsp;" !!} {!! "&nbsp;" !!}{!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!} {!! "&nbsp;" !!}  {{$agent->seller_code}}</option>
                                 @endforeach
             </select>
         </div>
@@ -68,7 +68,7 @@
                         <th scope="col"><h6>Commission Rate %</h6></th>
                         <th scope="col"><h6>Total Commission</h6></th>
                         <th scope="col"><h6>Total Refunded</h6></th>
-                        <th scope="col"><h6>Discount %</h6></th>
+{{--                        <th scope="col"><h6>Discount %</h6></th>--}}
                         <th scope="col"><h6>Customer Name</h6></th>
                         <th scope="col"><h6>Shipping Address</h6></th>
                         <th></th>
@@ -139,13 +139,13 @@
                                 @endif
                             </td>
 
-                            <td>
+                            {{--<td>
                                 @if($order->agent != null)
                                     {{$order->agent->discount}}
                                 @else
                                     none
                                 @endif
-                            </td>
+                            </td>--}}
 
                             <td>{{$order->customer_name}}</td>
                             <td>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AgentStore;
 use App\Customer;
 use App\Order;
 use App\User;
@@ -34,7 +35,7 @@ class AgentController extends Controller
         if (isset(Auth::user()->customer_id)) {
             $agent = Customer::find(Auth::user()->customer_id);
             $agent_coupen = $agent->coupon_code;
-            $agent_orders = Order::where('coupon_code', $agent_coupen)->get();
+            $agent_orders = Order::where('agent_id', Auth::user()->customer_id)->get();
             $total_sales = $agent_orders->sum('total_price');
             $total_commission = (($agent->commission / 100) * $total_sales );
 
@@ -66,5 +67,23 @@ class AgentController extends Controller
         }else{
             return back();
         }
+    }
+    public function agent_store(){
+        $stores=AgentStore::where('agent_id',Auth::user()->customer_id)->paginate(20);
+        return view('agentstores',compact('stores'));
+    }
+    public function agent_add_store(Request $request){
+        $request->validate([
+            'email' => 'required|email|unique:agent_stores',
+        ]);
+        $store=new AgentStore();
+        $store->agent_id=Auth::user()->customer_id;
+        $store->email=$request->email;
+        $store->save();
+        return back()->with('success','Store added successfully!');
+    }
+    public function agent_delete_store($id){
+        $stores=AgentStore::where('id',$id)->delete();
+        return back()->with('success','Store deleted successfully!');
     }
 }

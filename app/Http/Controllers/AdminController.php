@@ -6,6 +6,7 @@ use App\Agent_City;
 use App\Customer;
 use App\Order;
 use App\Order_line_Item;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class AdminController extends Controller
             $total_products = Order_line_Item::sum('quantity');
             $total_refunds_orders = Order::where('refund', 1)->newQuery();
         $sell_areas = Agent_City::whereNotNull('city')->get();
-        $agent_names = Customer::get();
+        $agent_names = Customer::where('is_agent',1)->get();
         $all_products = Order_line_Item::get();
         $sold_products =  $all_products->unique('shopify_product_id');    //now products are not duplicate
 
@@ -89,15 +90,17 @@ class AdminController extends Controller
                     }
 
                     if ($request->input('agent_names') != 'Select Agent Name') {
-                        $agent_name = Customer::where('email', $request->agent_names)->first();
+                        $agent_name = User::where('email', $request->agent_names)->first();
+                        $a_stores=$agent_name->has_stores->pluck('email')->toArray();
+//                        dd($a_stores);
                         if ($request->input('date-range') != 'Select Date Range') {
-                            $orders = $orders->Where('coupon_code', $agent_name->coupon_code);
+                            $orders = $orders->WhereIn('email', $a_stores);
 
                         }elseif ($request->input('sell_area') != 'Select Area') {
-                            $orders = $orders->Where('coupon_code', $agent_name->coupon_code);
+                            $orders = $orders->WhereIn('email', $a_stores);
                         }
                         else{
-                            $orders = $total_orders->Where('coupon_code', $agent_name->coupon_code);
+                            $orders = $total_orders->WhereIn('email', $a_stores);
 
                         }
                         if (isset($orders)) {
@@ -107,6 +110,7 @@ class AdminController extends Controller
                                 ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total, sum(total_price) as total_sum'))
                                 ->groupBy('date')
                                 ->get();
+//                            dd($total_orders);
                             $total_sales = $total_orders->sum('total_sum');
                             $total_commission = ($agents_commission / 100) * $total_sales;
                             $total_refund_orders = $total_refunds_orders->Where('coupon_code', $agent_name->coupon_code);

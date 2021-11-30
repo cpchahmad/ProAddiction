@@ -30,7 +30,7 @@
                         <th scope="col"><h6> Color & Zip Code</h6>  </th>
                         <th scope="col"><h6>Commission Rate %</h6>  </th>
                         <th scope="col"><h6>Total Commission</h6> </th>
-                        <th scope="col"><h6>Discount %</h6> </th>
+{{--                        <th scope="col"><h6>Discount %</h6> </th>--}}
                         <th scope="col"><h6>Customer Name</h6> </th>
                         <th scope="col"><h6>Shipping Address</h6> </th>
                         <th scope="col"><h6>Action</h6></th>
@@ -62,9 +62,9 @@
                             <td>
                                 {{ ($agent->commission / 100) * $order->total_price }}
                             </td>
-                            <td>
+                            {{--<td>
                                 {{$agent->discount}}&nbsp;
-                            </td>
+                            </td>--}}
 
                             <td>{{$order->customer_name}}</td>
                             <td>

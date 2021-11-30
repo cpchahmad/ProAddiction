@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Agent_City;
+use App\AgentStore;
 use App\Commission;
 use App\Customer;
 use App\ErrorLog;
@@ -21,7 +22,7 @@ class OrderController extends Controller
     {
 //        dd($request->all());
         $ordersQ = Order::query();
-        $agents = Customer::get();
+        $agents = Customer::where('is_agent',1)->get();
 
         if ($request->has('date-range') && $request->input('date-range') != 'Select Date Range') {
 
@@ -36,7 +37,9 @@ class OrderController extends Controller
 
         }
         if ($request->has('agent_name') && $request->input('agent_name') != 'Select Agent Name') {
-            $ordersQ->where('coupon_code',$request->agent_name);
+            $agent_name = User::where('email', $request->agent_name)->first();
+            $a_stores=$agent_name->has_stores->pluck('email')->toArray();
+            $ordersQ->whereIn('email',$a_stores);
         }
 
         $orders = $ordersQ->paginate(10);
@@ -105,6 +108,7 @@ class OrderController extends Controller
             }
             $c->shop_id = $shop->id;
             $c->save();
+            $o->email = $order->customer->email;
 
         } else
             $o->customer_name = 'none';
@@ -123,7 +127,25 @@ class OrderController extends Controller
             $o->coupon_code = 'none';
         $o->shop_id = $shop->id;
         $o->save();
-        if ($o->agent != null) {
+        $agent_stores=AgentStore::all;
+        if ($o->email != null) {
+            foreach ($agent_stores as $a_store) {
+                if ($o->email == $a_store->email) {
+                    $commission = Commission::where('order_id', $order->id)->first();
+                    if ($commission === null)
+                        $commission = new Commission();
+
+                    $commission->customer_id = $a_store->agent_id;
+                    $commission->order_id = $o->order_id;
+                    $commission->commission = $this->calculateCommission($order->total_price, $a_store->agent->agentDetail->commission);
+                    $commission->save();
+                    $o->agent_id = $a_store->agent_id;
+                    $o->save();
+                }
+            }
+        }
+
+        /*if ($o->agent != null) {
             $commission = Commission::where('order_id', $order->id)->first();
             if ($commission === null)
                 $commission = new Commission();
@@ -131,7 +153,8 @@ class OrderController extends Controller
             $commission->order_id = $o->order_id;
             $commission->commission = $this->calculateCommission($order->total_price, $o->agent->commission);
             $commission->save();
-        }
+        }*/
+
         $agent_city = new Agent_City();
         if ($order->discount_codes) {
             $agent_city->agent_code = $order->discount_codes[0]->code;
