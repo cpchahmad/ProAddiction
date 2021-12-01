@@ -92,7 +92,7 @@ class AdminController extends Controller
                     if ($request->input('agent_names') != 'Select Agent Name') {
                         $agent_name = User::where('email', $request->agent_names)->first();
                         $a_stores=$agent_name->has_stores->pluck('email')->toArray();
-//                        dd($a_stores);
+                        array_push($a_stores,$agent_name->email);
                         if ($request->input('date-range') != 'Select Date Range') {
                             $orders = $orders->WhereIn('email', $a_stores);
 

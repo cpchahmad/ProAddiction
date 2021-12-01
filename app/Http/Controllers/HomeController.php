@@ -38,6 +38,7 @@ class HomeController extends Controller
             $agent_coupen = $agent->coupon_code;
             $agent_name = Auth::user();
             $a_stores=$agent_name->has_stores->pluck('email')->toArray();
+            array_push($a_stores,$agent_name->email);
 
             $agent_orders = Order::whereIN('email', $a_stores)->where('refund', 0)->newQuery();
             $agent_products = Order_line_Item::whereIn('order_id', $agent_orders->pluck('id')->toArray());

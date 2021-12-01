@@ -39,6 +39,8 @@ class OrderController extends Controller
         if ($request->has('agent_name') && $request->input('agent_name') != 'Select Agent Name') {
             $agent_name = User::where('email', $request->agent_name)->first();
             $a_stores=$agent_name->has_stores->pluck('email')->toArray();
+            array_push($a_stores,$agent_name->email);
+
             $ordersQ->whereIn('email',$a_stores);
         }
 
@@ -128,30 +130,47 @@ class OrderController extends Controller
         $o->shop_id = $shop->id;
         $o->save();
         $agent_stores=AgentStore::all;
-        if ($o->email != null) {
-            foreach ($agent_stores as $a_store) {
-                if ($o->email == $a_store->email) {
-                    $commission = Commission::where('order_id', $order->id)->first();
-                    if ($commission === null)
-                        $commission = new Commission();
 
-                    $commission->customer_id = $a_store->agent_id;
-                    $commission->order_id = $o->order_id;
-                    $commission->commission = $this->calculateCommission($order->total_price, $a_store->agent->agentDetail->commission);
-                    $commission->save();
-                    $o->agent_id = $a_store->agent_id;
-                    $o->save();
+        if($o->email != null) {
+            $agent=User::Role('agent')->where('email',$o->email)->first();
+            if($agent===null){
+                foreach ($agent_stores as $a_store) {
+                    if ($o->email == $a_store->email) {
+                        $commission = Commission::where('order_id', $order->id)->first();
+                        if ($commission === null)
+                            $commission = new Commission();
+
+                        $commission->customer_id = $a_store->agent_id;
+                        $commission->order_id = $o->order_id;
+                        $commission->commission = $this->calculateCommission($order->total_price, $a_store->agent->agentDetail->commission);
+                        $commission->save();
+                        $o->agent_id = $a_store->agent_id;
+                        $o->save();
+                    }
                 }
+            }else{
+                $commission = Commission::where('order_id', $order->id)->first();
+                if ($commission === null)
+                    $commission = new Commission();
+
+                $commission->customer_id = $agent->customer_id;
+                $commission->order_id = $o->order_id;
+                $commission->commission = $this->calculateCommission($order->total_price, $agent->agentDetail->commission);
+                $commission->save();
+                $o->agent_id = $agent->customer_id;
+                $o->save();
             }
+
+
         }
 
-        /*if ($o->agent != null) {
+        /*if ($o->agent_order != null) {
             $commission = Commission::where('order_id', $order->id)->first();
             if ($commission === null)
                 $commission = new Commission();
-            $commission->customer_id = $o->agent->id;
+            $commission->customer_id = $o->agent_order->customer_id;
             $commission->order_id = $o->order_id;
-            $commission->commission = $this->calculateCommission($order->total_price, $o->agent->commission);
+            $commission->commission = $this->calculateCommission($order->total_price, $o->agent_order->commission);
             $commission->save();
         }*/
 
