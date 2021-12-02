@@ -228,9 +228,11 @@ class CustomerController extends Controller
     public function createDiscount($discount, $shop, $customers)
     {
         $customers = json_decode(json_encode($customers));
+        $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $d_code= substr(str_shuffle($permitted_chars), 0, 2);
         $priceRule = $shop->api()->rest('post', '/admin/price_rules.json', [
             'price_rule' => [
-                'title' => "$customers->first_name"."$customers->last_name"."$discount" . "%OFFONEACHITEM" . Carbon::now(),
+                'title' => "$customers->first_name"."$customers->last_name"."$discount" . "OFF" . $d_code,
                 'customer_selection' => 'prerequisite',
                 "prerequisite_customer_ids" => [
                     $customers->id
