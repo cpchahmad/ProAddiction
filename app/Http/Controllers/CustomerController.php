@@ -361,8 +361,60 @@ class CustomerController extends Controller
         $professional->save();
         $discount=50;
         $shop = Auth::user();
-        $customer=Customer::where('email',$professional->email)->first();
-        if($customer==null){
+        $check_customer = $shop->api()->rest('get', '/admin/customers/search.json', [
+            'query' => 'email='.$professional->email
+        ]);
+        $check_customer = json_decode(json_encode($check_customer['body']['container']['customers']));
+        if (count($check_customer)){
+//            dd($check_customer[0]->id);
+            $customers = $shop->api()->rest('put', '/admin/customers/'.$check_customer[0]->id.'.json', [
+                'customer' => [
+                    "tags" => "professional",
+                    "metafields" =>
+                        array(
+                            0 =>
+                                array(
+                                    "key" => 'is_professional',
+                                    "value" => 1,
+                                    "value_type" => "boolean",
+                                    "namespace" => "customers",
+                                ),
+                            1 =>
+                                array(
+                                    "key" => 'discount',
+                                    "value" => $discount,
+                                    "value_type" => "float",
+                                    "namespace" => "customers",
+                                ),
+                        ),
+                ]
+            ]);
+//            dd($customers['errors']);
+            if($customers['errors']==true) {
+                $customers = $shop->api()->rest('put', '/admin/customers/'.$check_customer[0]->id.'.json', [
+                    'customer' => [
+                        "tags" => "professional",
+                    ]
+                ]);
+                $metafields = $shop->api()->rest('get', '/admin/customers/'.$check_customer[0]->id.'/metafields.json');
+                $metafields = json_decode(json_encode($metafields['body']['container']['metafields']));
+                foreach ($metafields as $metafield){
+//            dd($metafield);
+                    if($metafield->key=='discount') {
+                        $customer_metafield = $shop->api()->rest('put', '/admin/metafields/' . $metafield->id . '.json', [
+                            "metafield" => [
+                                "value" => $discount
+                            ]
+                        ]);
+                    }
+
+                }
+            }
+
+            $customers = json_decode(json_encode($customers['body']['container']['customer']));
+
+        }
+        else{
             $customers = $shop->api()->rest('post', '/admin/customers.json', [
                 'customer' => [
                     'first_name' => $professional->name,
@@ -395,10 +447,14 @@ class CustomerController extends Controller
                         ),
                 ]
             ]);
-
             $customers = json_decode(json_encode($customers['body']['container']['customer']));
-            list($couponCode, $price_rule_id,$discount_id) = $this->createDiscount($discount, $shop,$customers);
 
+        }
+
+        list($couponCode, $price_rule_id,$discount_id) = $this->createDiscount($discount, $shop,$customers);
+
+        $customer=Customer::where('email',$professional->email)->first();
+        if($customer==null){
             $c = Customer::create([
                 'first_name' => $professional->name,
                 'last_name' => $professional->name,
@@ -415,6 +471,10 @@ class CustomerController extends Controller
             ]);
         }else{
             $customer->tag="professional";
+            $customer->coupon_code=$couponCode;
+            $customer->discount=$discount;
+            $customer->price_rule_id=$price_rule_id;
+            $customer->discount_id=$discount_id;
             $customer->save();
         }
         try{
@@ -424,8 +484,6 @@ class CustomerController extends Controller
             $send_to = $c->email;
             $data['from_address'] = env('MAIL_FROM_ADDRESS');//Sender Email
             Mail::to($send_to)->send(new SendEmail($data));
-
-
             return redirect(route('professionals.check'));
 
         }catch (\Exception $exception){
