@@ -361,6 +361,7 @@ class CustomerController extends Controller
         $professional->save();
         $discount=50;
         $shop = Auth::user();
+        try{
         $check_customer = $shop->api()->rest('get', '/admin/customers/search.json', [
             'query' => 'email='.$professional->email
         ]);
@@ -477,17 +478,20 @@ class CustomerController extends Controller
             $customer->discount_id=$discount_id;
             $customer->save();
         }
-        try{
+            try{
+                $data['subject'] = "ProAddiction";
+                $data['message'] = "You just got approved to PROFESSIONAL. Please visit Store.";
+                $send_to = $c->email;
+                $data['from_address'] = env('MAIL_FROM_ADDRESS');//Sender Email
+                Mail::to($send_to)->send(new SendEmail($data));
+                return redirect(route('professionals.check'))->with('success','Professional added!');
 
-            $data['subject'] = "ProAddiction";
-            $data['message'] = "You just got approved to PROFESSIONAL. Please visit Store.";
-            $send_to = $c->email;
-            $data['from_address'] = env('MAIL_FROM_ADDRESS');//Sender Email
-            Mail::to($send_to)->send(new SendEmail($data));
-            return redirect(route('professionals.check'));
+            }catch (\Exception $exception){
+                return redirect(route('professionals.check'))->with('success','Professional added!');
 
+            }
         }catch (\Exception $exception){
-            return redirect(route('professionals.check'));
+            return redirect(route('professionals.check'))->with('error','Some thing went wrong!');
 
         }
     }
