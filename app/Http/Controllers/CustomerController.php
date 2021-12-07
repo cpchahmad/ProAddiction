@@ -297,7 +297,7 @@ class CustomerController extends Controller
         $request->validate([
             'name'     =>  'required',
             'email'           => 'required',
-            'password'           => 'required',
+            'password'           => 'required|min:5',
             'phone'           => 'required',
             'address'           => 'required',
             'file'           => 'required'
@@ -494,7 +494,7 @@ class CustomerController extends Controller
 
             }
         }catch (\Exception $exception){
-            return redirect(route('professionals.check'))->with('error','Some thing went wrong!');
+            return redirect(route('professionals.check'))->with('error','Customer not created Please try again!');
 
         }
     }

@@ -90,7 +90,7 @@
                 </div>
                 <div class="form-group">
                     <label for="#">Password</label>
-                    <input placeholder="Enter password" type="password" name="password" class="form-control" required>
+                    <input placeholder="Enter password" type="password" name="password" class="form-control" minlength="5" required>
                 </div>
                 <div class="form-group">
                     <label for="#">Phone Number</label>
