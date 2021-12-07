@@ -357,8 +357,7 @@ class CustomerController extends Controller
     public function professional_approve($id)
     {
         $professional = Professional::findorfail($id);
-        $professional->status=1;
-        $professional->save();
+
         $discount=50;
         $shop = Auth::user();
         try{
@@ -470,6 +469,8 @@ class CustomerController extends Controller
                 'price_rule_id' => $price_rule_id,
                 'discount_id' => $discount_id,
             ]);
+            $professional->status=1;
+            $professional->save();
         }else{
             $customer->tag="professional";
             $customer->coupon_code=$couponCode;
@@ -477,6 +478,8 @@ class CustomerController extends Controller
             $customer->price_rule_id=$price_rule_id;
             $customer->discount_id=$discount_id;
             $customer->save();
+            $professional->status=1;
+            $professional->save();
         }
             try{
                 $data['subject'] = "ProAddiction";
