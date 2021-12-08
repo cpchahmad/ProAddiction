@@ -5,10 +5,17 @@
 
         <div class="d-flex justify-content-between mb-3">
             <h5>Professional Detail</h5>
+            @if($professional->status==1)
+                <div>
+                    <a type="button" class="btn btn-info btn-lg" href="{{route('professionals')}}">Back</a>
+                </div>
+            @else
             <div>
                <a type="button" class="btn btn-info btn-lg" href="{{route('professional.approve',($professional->id))}}">Approve</a>
                <a type="button" class="btn btn-danger btn-lg" href="{{route('professional.disapprove',($professional->id))}}">Disapprove</a>
             </div>
+            @endif
+
         </div>
 
         <div class="row">

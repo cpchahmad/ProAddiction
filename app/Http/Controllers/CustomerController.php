@@ -339,7 +339,7 @@ class CustomerController extends Controller
 //        return back()->with('success','Form Submitted Successfully!');
     }
     public function professionals(){
-        $professionals=Customer::where('tag',"Professional")->paginate(50);
+        $professionals=Customer::where('tag',"professional")->paginate(50);
         return view('professionals',compact('professionals'));
     }
     public function professionals_check(){
@@ -347,6 +347,15 @@ class CustomerController extends Controller
         return view('professionals_check',compact('professionals'));
     }
     public function professional_detail($id)
+    {
+        $customer=Customer::findorfail($id);
+        $professional = Professional::where('email',$customer->email)->first();
+        return view('professionaldetail')->with(
+            'professional', $professional
+        );
+
+    }
+    public function professional_view($id)
     {
         $professional = Professional::findorfail($id);
         return view('professionaldetail')->with(

@@ -36,7 +36,8 @@ Route::group(['middleware' => ['auth.shopify']], function () {
 
     Route::get('/professionals', 'CustomerController@professionals')->name('professionals');
     Route::get('/professionals_check', 'CustomerController@professionals_check')->name('professionals.check');
-    Route::get('/professional-view/{id}', 'CustomerController@professional_detail')->name('professional-view');
+    Route::get('/professional-view/{id}', 'CustomerController@professional_view')->name('professional-view');
+    Route::get('/professional-detail/{id}', 'CustomerController@professional_detail')->name('professional-detail');
     Route::get('/professional/{id}/approve', 'CustomerController@professional_approve')->name('professional.approve');
     Route::get('/professional/{id}/disapprove', 'CustomerController@professional_disapprove')->name('professional.disapprove');
 

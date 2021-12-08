@@ -44,7 +44,7 @@
                         <th scope="col"><h6>Phone Number</h6> </th>
                         <th scope="col"><h6>Address</h6> </th>
                         <th scope="col"><h6>Tag</h6> </th>
-{{--                        <th scope="col"><h6>Action</h6></th>--}}
+                        <th scope="col"><h6>Action</h6></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -59,11 +59,11 @@
                         <td>{{$professional->tag}}</td>
 
 
-                        {{--<td>
+                        <td>
                             <div class="text-end">
-                                <a href="{{route('professional-view',($professional->id))}}" class="btn btn-sm btn-primary" type="button"> view</a>
+                                <a href="{{route('professional-detail',($professional->id))}}" class="btn btn-sm btn-primary" type="button"> view</a>
                             </div>
-                        </td>--}}
+                        </td>
                     </tr>
                     @endforeach
 
