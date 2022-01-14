@@ -22,7 +22,7 @@ class AdminController extends Controller
             $total_sales = $total_orders->where('refund',0)->sum('total_price');
             $agents_commission = Customer::sum('commission');
             $total_commission = ($agents_commission / 100 ) * $total_sales;
-            $agent_orders = Order::whereNotNull('coupon_code')->where('refund',0)->get();
+            $agent_orders = Order::whereNotNull('agent_id')->where('refund',0)->get();
             $agentorders_sale = $agent_orders->sum('total_price');
             $total_products = Order_line_Item::sum('quantity');
             $total_refunds_orders = Order::where('refund', 1)->newQuery();
@@ -113,7 +113,7 @@ class AdminController extends Controller
 //                            dd($total_orders);
                             $total_sales = $total_orders->sum('total_sum');
                             $total_commission = ($agents_commission / 100) * $total_sales;
-                            $total_refund_orders = $total_refunds_orders->Where('coupon_code', $agent_name->coupon_code);
+                            $total_refund_orders = $total_refunds_orders->Where('agent_id', $agent_name->id);
 
                             $graph_one_order_dates = $total_orders->pluck('date')->toArray();
                             $graph_one_order_values = $total_orders->pluck('total')->toArray();

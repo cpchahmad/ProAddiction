@@ -19,7 +19,7 @@ class AnalyticsController extends Controller
                 dd($agent->has_order);
             }
         }*/
-        $totalOrders = Order::where('coupon_code', '!=', 'none');
+        $totalOrders = Order::whereNotNull('agent_id');
         $totalOrdersCount = $totalOrders->get()->count();
         $totalRefundCount = $totalOrders->where('refund', 1)->get()->count();
         return view('analytics', compact('agents', 'totalOrdersCount', 'totalRefundCount'));

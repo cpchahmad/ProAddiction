@@ -491,8 +491,10 @@ class CustomerController extends Controller
             $professional->save();
         }
             try{
-                $data['subject'] = "ProAddiction";
-                $data['message'] = "You just got approved to PROFESSIONAL. Please visit Store.";
+                $data['subject'] = "Proaddiction";
+                $data['message'] = "Welcome to Proaddiction
+                    Your Proffesional account has been successfully approved.
+                    You can now log in .";
                 $send_to = $c->email;
                 $data['from_address'] = env('MAIL_FROM_ADDRESS');//Sender Email
                 Mail::to($send_to)->send(new SendEmail($data));
