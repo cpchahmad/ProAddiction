@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['api/*','/check-customer-email'],
+    'paths' => ['api/*','/check-customer-email','/professional/form'],
 
     'allowed_methods' => ['*'],
 
