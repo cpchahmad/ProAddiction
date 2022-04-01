@@ -294,13 +294,14 @@ class CustomerController extends Controller
         return view('professional_form');
     }
     public function professional_form_submit(Request $request){
+//        dd($request->all());
         $request->validate([
             'name'     =>  'required',
             'email'           => 'required',
-            'password'           => 'required|min:5',
+            'password'           => 'required|min:6',
             'phone'           => 'required',
             'address'           => 'required',
-            'file'           => 'required'
+//            'file'           => 'required'
         ]);
         if ($request->hasFile('file')) {
             $date = Carbon::now();

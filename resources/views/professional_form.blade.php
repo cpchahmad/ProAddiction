@@ -18,8 +18,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" type="text/css" href="{{asset('/')}}assets/toaster.min.css">
-    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
-    </script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="{{asset('/')}}country_picker/css/countrySelect.css">
+
     <style>
         .grid-highlight {
             padding-top: 1rem;
@@ -48,6 +49,9 @@
             border: 1px solid #000;
             color: #fff;
             font-size: 14px;
+        }
+        .country-select {
+            display: block;
         }
     </style>
     <script type="text/javascript">
@@ -89,20 +93,31 @@
                     <input placeholder="Enter email address" type="email" name="email" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label for="#">Password</label>
-                    <input placeholder="Enter password" type="password" name="password" class="form-control" minlength="5" required>
+                    <label for="#">Password ( password must be at least 6 characters long)</label>
+                    <input placeholder="Enter password" type="password" name="password" class="form-control" minlength="6" required>
                 </div>
                 <div class="form-group">
                     <label for="#">Phone Number</label>
                     <input placeholder="Enter Phone number" type="text" name="phone" class="form-control" required>
-                </div>
+                </div>{{--
                 <div class="form-group">
                     <label for="#">Salon address</label>
                     <input placeholder="Enter Salon address" type="text" name="address" class="form-control" required>
-                </div>
+                </div>--}}
                 <div class="form-group">
+                    <label for="#">Country of Origin</label>
+                    <div class="form-item">
+                        <input id="country_selector" class="form-control" name="address"  type="text">
+                        <label for="country_selector" style="display:none;">Select a country here...</label>
+                    </div>
+                    <div class="form-item" style="display:none;">
+                        <input type="text" id="country_selector_code" name="country_selector_code" data-countrycodeinput="1" readonly="readonly" placeholder="Selected country code will appear here" />
+                        <label for="country_selector_code">...and the selected country code will be updated here</label>
+                    </div>
+                </div>
+                <div class="form-group upload_license_div"{{-- style="display: none;"--}}>
                     <label for="#">Upload file - Stylist License</label>
-                    <input type="file" name="file" class="form-control" required>
+                    <input type="file" name="file" class="form-control" id="upload_license" required >
                 </div>
 
 
@@ -115,7 +130,7 @@
     </div>
 </div>
 
-<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+{{--<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>--}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
@@ -123,6 +138,29 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script src="{{asset('/')}}assets/toaster.min.js"></script>
+<script src="{{asset('/')}}country_picker/js/countrySelect.js"></script>
+
+<script>
+    $("#country_selector").countrySelect({
+        // defaultCountry: "jp",
+        // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+        // responsiveDropdown: true,
+        // preferredCountries: ['ca', 'gb', 'us']
+    });
+    $(document).ready(function () {
+    $('body').on('change','input','#country_selector',function () {
+        var country_code=$('#country_selector_code').val();
+        if(country_code=="us"){
+            $('.upload_license_div').show();
+            $('#upload_license').prop('required',true);
+        }else{
+            $('.upload_license_div').hide();
+            $('#upload_license').prop('required',false);
+        }
+        // alert(country_code);
+    })
+    });
+</script>
 @if(Session::has('success'))
     toastr.success("{{ Session::get('success') }}");
 @endif
