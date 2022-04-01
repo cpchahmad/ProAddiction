@@ -81,7 +81,7 @@
 <div class="container-fluid h-100 p-0">
     <div style="min-height: 100%" class="flex-row d-flex align-items-stretch m-0">
 
-        <div class="col-lg-12 col-md-12 p-4 professionalFrom">
+        <div class="col-lg-12 col-md-12 p-4">
             <form action="{{route('professionals.form.submit')}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
