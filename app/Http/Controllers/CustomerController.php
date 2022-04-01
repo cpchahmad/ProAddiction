@@ -291,7 +291,7 @@ class CustomerController extends Controller
 
     public function professional_form(){
 
-        return view('professional_form');
+        return view('professional_form')->render();
     }
     public function professional_form_submit(Request $request){
 //        dd($request->all());
