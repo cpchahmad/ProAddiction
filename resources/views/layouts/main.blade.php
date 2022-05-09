@@ -119,8 +119,25 @@
     </script>--}}
 
 @yield('scripts')
-
-
+<script>
+    $('body').on('keyup','.filter-search',function () {
+        var search=$(this).val();
+        $.ajax({
+            url: $(this).data('route'),
+            method: 'GET',
+            data:{
+                search : $(this).val(),
+            },
+            success:function (response){
+                // console.log(response);
+                $('#Table').find('#tableData').empty();
+                $('#Table').find('#tableData').append($(response).find('#tableData').html());
+                $('#paginationData').empty();
+                $('#paginationData').append($(response).find('#paginationData').html());
+            }
+        });
+    })
+</script>
 </body>
 
 </html>

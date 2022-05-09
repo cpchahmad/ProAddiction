@@ -339,8 +339,15 @@ class CustomerController extends Controller
         }
 //        return back()->with('success','Form Submitted Successfully!');
     }
-    public function professionals(){
-        $professionals=Customer::where('tag',"professional")->paginate(50);
+    public function professionals(Request $request){
+        $professionals=Customer::query();
+        if($request->search){
+            $search = $request->input('search');
+            $professionals->where('first_name', 'like', '%' . $search . '%');
+            $professionals->orwhere('last_name', 'like', '%' . $search . '%');
+            $professionals->orwhere('email', 'like', '%' . $search . '%');
+        }
+        $professionals=$professionals->where('tag',"professional")->latest()->paginate(50);
         return view('professionals',compact('professionals'));
     }
     public function professionals_check(){

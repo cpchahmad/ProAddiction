@@ -31,12 +31,13 @@
             <h5>Professionals</h5>
             <div>
 {{--                <a type="button" class="btn btn-info btn-lg" href="{{route('sync-customer')}}">Sync Customers</a>--}}
+                <input type="text" class="form-control filter-search" name="search"  placeholder="Search...">
             </div>
         </div>
     @if(count($professionals)> 0)
         <div class="row">
             <div class="col-md-12 ">
-                <table class="table {{--table_wrapper--}} table-striped table-hover">
+                <table id="Table" class="table {{--table_wrapper--}} table-striped table-hover" >
                     <thead class="border-0">
                     <tr>
                         <th scope="col"><h6>Name</h6></th>
@@ -47,7 +48,7 @@
                         <th scope="col"><h6>Action</h6></th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tableData">
                     @foreach($professionals as $professional)
                     <tr>
     {{--                    <th scope="row">1</th>--}}
@@ -70,7 +71,7 @@
                     </tbody>
                 </table>
 
-                <div style="float: right">
+                <div style="float: right" id="paginationData">
                     {{ $professionals->links() }}
                 </div>
             </div>
