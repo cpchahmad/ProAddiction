@@ -348,6 +348,9 @@ class CustomerController extends Controller
             $professionals->orwhere('email', 'like', '%' . $search . '%');
         }
         $professionals=$professionals->where('tag',"professional")->latest()->paginate(50);
+        if($request->input('search')) {
+            $professionals->appends(['search'=>$request->input('search')]);
+        }
         return view('professionals',compact('professionals'));
     }
     public function professionals_check(){
