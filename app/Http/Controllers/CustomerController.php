@@ -341,17 +341,18 @@ class CustomerController extends Controller
     }
     public function professionals(Request $request){
         $professionals=Customer::query();
-        if($request->search){
-            $search = $request->input('search');
+        $search = $request->input('search');
+
+        if($search){
             $professionals->where('first_name', 'like', '%' . $search . '%');
             $professionals->orwhere('last_name', 'like', '%' . $search . '%');
             $professionals->orwhere('email', 'like', '%' . $search . '%');
         }
         $professionals=$professionals->where('tag',"professional")->latest()->paginate(50);
-        if($request->input('search')) {
-            $professionals->appends(['search'=>$request->input('search')]);
+        if($search) {
+            $professionals->appends(['search'=>$search]);
         }
-        return view('professionals',compact('professionals'));
+        return view('professionals',compact('professionals','search'));
     }
     public function professionals_check(){
         $professionals=Professional::where('status',0)->orderBy('created_at','desc')->paginate(50);

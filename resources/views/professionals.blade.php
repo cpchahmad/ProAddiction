@@ -31,7 +31,7 @@
             <h5>Professionals</h5>
             <div>
 {{--                <a type="button" class="btn btn-info btn-lg" href="{{route('sync-customer')}}">Sync Customers</a>--}}
-                <input type="text" class="form-control filter-search" name="search"  placeholder="Search...">
+                <input type="text" class="form-control filter-search" name="search"  placeholder="Search..." value="{{$search}}">
             </div>
         </div>
     @if(count($professionals)> 0)
